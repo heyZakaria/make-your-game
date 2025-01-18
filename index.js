@@ -49,7 +49,6 @@ let mapArray = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-
 let tileSize = 32;
 let mapX = 0
 let mapY = -32
@@ -64,6 +63,7 @@ greenBlockImage.src = `./assets/greenBlock.png`
 
 
 class mapClass {
+
 
     constructor(tileSize) {
         this.height = tileSize * 2 * mapArray.length
@@ -85,7 +85,6 @@ class mapClass {
 
                 switch (column) {
                     case 0:
-
                         let yajor = document.createElement("div")
                         yajor.style.width = tileSize + "px"
                         yajor.style.height = tileSize + "px"
@@ -98,7 +97,6 @@ class mapClass {
                         mapX += tileSize
                         break;
                     case 1:
-
                         let gress = document.createElement("div")
                         gress.style.backgroundImage = `url(${greenBlockImage.src})`
                         gress.style.width = tileSize + "px"
@@ -130,3 +128,4 @@ class mapClass {
 
 let level1 = new mapClass
 level1.drawMap(mapArray)
+
