@@ -63,16 +63,13 @@ greenBlockImage.src = `./assets/greenBlock.png`
 
 
 class mapClass {
-
-
     constructor(tileSize) {
         this.height = tileSize * 2 * mapArray.length
         this.width = tileSize * 2 * mapArray[0].length
     }
 
-
     drawMap = function (mapArr) {
-
+        
         for (let row of mapArr) {
 
             mapX = 0
@@ -82,7 +79,7 @@ class mapClass {
                 if (Math.random() < 0.2 && column == 1) {
                     column = 2
                 }
-
+                
                 switch (column) {
                     case 0:
                         let yajor = document.createElement("div")
@@ -125,6 +122,8 @@ class mapClass {
 
     }
 }
+
+
 
 let level1 = new mapClass
 level1.drawMap(mapArray)
