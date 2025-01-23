@@ -49,7 +49,6 @@ let mapArray = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-
 let tileSize = 32;
 let mapX = 0
 let mapY = -32
@@ -66,6 +65,7 @@ console.log(mapArray.length, "HEIGHT");
 console.log(mapArray[0].length, "WIDTH");
 
 class mapClass {
+
 
     constructor(tileSize) {
         /* this.height = tileSize * 2 * mapArray.length
@@ -95,7 +95,6 @@ class mapClass {
 
                 switch (column) {
                     case 0:
-
                         let yajor = document.createElement("div")
                         yajor.style.width = tileSize + "px"
                         yajor.style.height = tileSize + "px"
@@ -141,3 +140,4 @@ class mapClass {
 
 let level1 = new mapClass
 level1.drawMap(mapArray)
+
