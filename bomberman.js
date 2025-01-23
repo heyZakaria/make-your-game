@@ -1,5 +1,4 @@
 let mapSence = document.getElementById("map");
-let heroDiv;
 let mapArray = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -24,12 +23,11 @@ let mapArray = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-
 const heroConfig = {
     tileSize: 32,
     initialGridX: 1, 
     initialGridY: 1,
-    moveSpeed: 2 
+    speed: 1
 };
 
 
@@ -46,124 +44,141 @@ heroImage.left.src = './assets/move_left.png';
 heroImage.right.src = './assets/move_right.png';
 
 
-function placeHero() {
-    heroDiv = document.createElement("div");
-    heroDiv.style.width = heroConfig.tileSize + "px";
-    heroDiv.style.height = heroConfig.tileSize + "px";
-    heroDiv.style.position = "absolute";
-    heroDiv.style.backgroundImage = `url(${heroImage.down.src})`;
-    
-    x = heroConfig.initialGridX * heroConfig.tileSize;
-    y = heroConfig.initialGridY * heroConfig.tileSize;
-    
-    mapSence.appendChild(heroDiv);
-    return heroDiv;
-}
-
-
-
-function canMove(newX, newY) {
-    const tileSize = heroConfig.tileSize;
-    const gridX = Math.floor(newX / tileSize);
-    const gridY = Math.floor(newY / tileSize);
-
-    if (mapArray[gridY] && mapArray[gridY][gridX] === 1) {
+class MapHero {
+    constructor() {
+        this.x = heroConfig.initialGridX * heroConfig.tileSize;
+        this.y = heroConfig.initialGridY * heroConfig.tileSize;
         
-        const topRightX = Math.floor((newX + tileSize - 1) / tileSize);
-        const bottomLeftY = Math.floor((newY + tileSize - 1) / tileSize);
-        const bottomRightX = Math.floor((newX + tileSize - 1) / tileSize);
-        const bottomRightY = Math.floor((newY + tileSize - 1) / tileSize);
-
-        return (
-            mapArray[Math.floor(newY / tileSize)][topRightX] === 1 &&
-            mapArray[bottomLeftY][gridX] === 1 &&
-            mapArray[bottomRightY][bottomRightX] === 1
-        );
+        this.element = document.createElement('div');
+        this.element.style.width = heroConfig.tileSize + "px";
+        this.element.style.height = heroConfig.tileSize + "px";
+        this.element.style.position = "absolute";
+        this.element.style.backgroundImage = `url(${heroImage.down.src})`;
+        
+        mapSence.appendChild(this.element);
+         
+        this.directions_press = [];
+        this.initializeControls(); 
+        this.startGameLoop();
     }
-    return true; 
-}
-let x, y;
-let directions_press = [];
 
-const moveHero = () => {
-    const direction_press = directions_press[0];
-    let newX = x;
-    let newY = y;
-    
-    if (direction_press) {
-        switch(direction_press) {
-            case directions.right:
-                newX = x + heroConfig.moveSpeed;
-                heroDiv.style.backgroundImage = `url(${heroImage.right.src})`;
-                break;
-            case directions.left:
-                newX = x - heroConfig.moveSpeed;
-                heroDiv.style.backgroundImage = `url(${heroImage.left.src})`;
-                break;
-            case directions.down:
-                newY = y + heroConfig.moveSpeed;
-                heroDiv.style.backgroundImage = `url(${heroImage.down.src})`;
-                break;
-            case directions.up:
-                newY = y - heroConfig.moveSpeed;
-                heroDiv.style.backgroundImage = `url(${heroImage.up.src})`;
-                break;
-        }
-        
-        
-        if (canMove(newX, newY)) {
-            x = newX;
-            y = newY;
-        }
+    initializeControls() {
+        document.addEventListener("keydown", (e) => {
+            const dir = keys[e.key];
+            if (dir && this.directions_press.indexOf(dir) === -1) {
+                this.directions_press.unshift(dir);
+            }
+        });
+
+        document.addEventListener("keyup", (e) => {
+            const dir = keys[e.key];
+            const index = this.directions_press.indexOf(dir);
+            if (index > -1) {
+                this.directions_press.splice(index, 1);
+            }
+        });
     }
     
+
+    moveHero() {
+        const direction_press = this.directions_press[0];
+        let newX = this.x;
+        let newY = this.y;
+        
+        if (direction_press) {
+            switch(direction_press) {
+                case directions.right:
+                    newX = this.x + heroConfig.speed;
+                    this.element.style.backgroundImage = `url(${heroImage.right.src})`;
+                    break;
+                case directions.left:
+                    newX = this.x - heroConfig.speed;
+                    this.element.style.backgroundImage = `url(${heroImage.left.src})`;
+                    break;
+                case directions.down:
+                    newY = this.y + heroConfig.speed;
+                    this.element.style.backgroundImage = `url(${heroImage.down.src})`;
+                    break;
+                case directions.up:
+                    newY = this.y - heroConfig.speed;
+                    this.element.style.backgroundImage = `url(${heroImage.up.src})`;
+                    break;
+            }
+            
+            if (this.canMove(newX, newY)) {
+                this.x = newX;
+                this.y = newY;
+            }
+        }
+        
+        const mapWidth = mapArray[0].length * heroConfig.tileSize;
+        const mapHeight = mapArray.length * heroConfig.tileSize;
+        
+        this.x = Math.max(heroConfig.tileSize, Math.min(this.x, mapWidth - heroConfig.tileSize));
+        this.y = Math.max(heroConfig.tileSize, Math.min(this.y, mapHeight - heroConfig.tileSize));
+        
+        this.render();
+    }
     
-    const mapWidth = mapArray[0].length * heroConfig.tileSize;
-    const mapHeight = mapArray.length * heroConfig.tileSize;
+
+    canMove(newX, newY) {
+        const tileSize = heroConfig.tileSize;
+        const gridX = Math.floor(newX / tileSize);
+        const gridY = Math.floor(newY / tileSize);
     
-    x = Math.max(heroConfig.tileSize, Math.min(x, mapWidth - heroConfig.tileSize));
-    y = Math.max(heroConfig.tileSize, Math.min(y, mapHeight - heroConfig.tileSize));
-    
-    heroDiv.style.left = x + "px";
-    heroDiv.style.top = y + "px";
-};
+        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1 || (mapArray[gridY][gridX]) === 2)) { 
+           
+            const topRightX = Math.floor((newX + tileSize - 1) / tileSize);
+            const bottomLeftY = Math.floor((newY + tileSize - 1) / tileSize);
+            const bottomRightX = Math.floor((newX + tileSize - 1) / tileSize);
+            const bottomRightY = Math.floor((newY + tileSize - 1) / tileSize);
+            console.log(mapArray[gridY][gridX]);
+            
+            return (
+                
+                (mapArray[Math.floor(newY / tileSize)][topRightX] === 1 || 
+                 mapArray[Math.floor(newY / tileSize)][topRightX] === 2) &&
+                (mapArray[bottomLeftY][gridX] === 1 || mapArray[bottomLeftY][gridX] === 2) &&
+                (mapArray[bottomRightY][bottomRightX] === 1 || 
+                 mapArray[bottomRightY][bottomRightX] === 2)
+            );
+        }
+        console.log(mapArray[gridY][gridX]);
+                       
+        return false;
+    }   
+
+
+    render() {
+        this.element.style.left = this.x + "px";
+        this.element.style.top = this.y + "px";
+    }
+
+    startGameLoop() {
+        const gameLoop = () => {
+            this.moveHero();
+            window.requestAnimationFrame(gameLoop);
+        };
+        gameLoop();
+    }
+}
 
 
 const directions = {
-    up: "up",
-    down: "down",
-    left: "left",
-    right: "right",
+    up: "ArrowUp",
+    down: "ArrowDown",
+    left: "ArrowLeft",
+    right: "ArrowRight",
 };
 
 const keys = {
-    38: directions.up,
-    37: directions.left,
-    39: directions.right,
-    40: directions.down,
+    ArrowUp: directions.up,
+    ArrowLeft: directions.left,
+    ArrowRight: directions.right,
+    ArrowDown: directions.down,
 };
 
-document.addEventListener("keydown", (e) => {
-    const dir = keys[e.which];
-    if (dir && directions_press.indexOf(dir) === -1) {
-        directions_press.unshift(dir);
-    }
-});
-
-document.addEventListener("keyup", (e) => {
-    const dir = keys[e.which];
-    const index = directions_press.indexOf(dir);
-    if (index > -1) {
-        directions_press.splice(index, 1);
-    }
-});
-
-const step = () => {
-    moveHero();
-    window.requestAnimationFrame(step);
-};
 
 window.addEventListener('load', () => {
-    placeHero();
-    step();
+    const hero = new MapHero();
 });
