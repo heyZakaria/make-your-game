@@ -16,7 +16,7 @@ function killhero(xa,xb,ya,yb){
     return Math.sqrt((xa-xb)*(xa-xb)+(ya-yb)*(ya-yb))
 
 }
-
+ let isboombed =false
  
  let newseconede =0
 
@@ -674,10 +674,32 @@ class MapHero {
                         
         return false;
     }  
- 
-     
-         creatboomb(x,y){
- 
+
+    // destroyboomb(boomb,seconde,Xboomb,Yboomb){
+    //     let cemoment=new Date().getSeconds()
+    //     let delta=cemoment-seconde
+
+    //     call this.destroyboomb fter delta seconde 
+    
+        
+    //     if (cemoment- seconde>4){
+    //         mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
+    //         boomb.style.display="none"
+
+    //         newseconede=0
+
+
+    // }else{
+    //  this.destroyboomb(cemoment,Xboomb,Yboomb)
+    // }
+
+        
+
+        
+    
+
+    creatboomb(x,y){
+        isboombed=true
 
         let Xboomb = Math.floor(this.x);
         let Yboomb = Math.floor(this.y);
@@ -730,6 +752,9 @@ class MapHero {
 
         
         setTimeout(() => {
+
+
+            this.boombandhero((Xboomb)/32,Yboomb/32)
             mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
             boomb.remove();  
         }, 6000);
@@ -739,8 +764,29 @@ class MapHero {
 
     }
 
-     
-     
+
+    boombandhero(Xboomb,Yboomb){
+        console.log("sssssssssssssssssssssssssss",Math.floor(this.x/32),Math.floor(this.y/32))
+
+        let herox=this.x/32
+        let heroy=this.y/32
+        if (killhero(Xboomb,herox,Yboomb,heroy)<1){
+
+            // this.element.style.backgroundImage=`url(${"./assets/destroy_hero.png"})`
+             this.currentDirection = directions.destroy;
+
+
+            // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+          }
+
+
+
+
+    }
+
+
+
+
     moveHero() {
          const direction = this.pressedDirections[0];
         let newX = this.x;
