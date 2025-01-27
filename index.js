@@ -1,11 +1,19 @@
 let mapSence = document.getElementById("map")
 var enemycord=[-1,-1]
  var herocord=[2,2]
-
+var boombcord=[0,0]
 function getenemycord(x,y){
     enemycord[0]=x
     enemycord[1]=y
 }
+
+function getboombcord(x,y){
+    boombcord[0],x
+    boombcord[1],y
+}
+
+
+
 
 function getherocord(x,y){
     herocord[0]=x
@@ -16,6 +24,14 @@ function killhero(xa,xb,ya,yb){
     return Math.sqrt((xa-xb)*(xa-xb)+(ya-yb)*(ya-yb))
 
 }
+
+function killenemy(xa,xb,ya,yb){
+    return Math.sqrt((xa-xb)*(xa-xb)+(ya-yb)*(ya-yb))
+
+}
+
+
+ 
  let isboombed =false
  
  let newseconede =0
@@ -367,6 +383,8 @@ class Enemy {
         return enemy;
     }
 
+
+
     getRandomDirection() {
         const validDirections = this.getValidDirections();
         // no chane if lenght 0
@@ -412,7 +430,8 @@ class Enemy {
     move() {
 
         getenemycord(this.pixelX/32,this.pixelY/32)
-                
+
+        
  
 
         if (this.isMoving) return;
@@ -540,7 +559,7 @@ const heroConfig = {
     tileSize: 32,
     initialGridX: 1, 
     initialGridY: 1,
-    speed: 2
+    speed: 6
 };
 
 const directions = {
@@ -703,6 +722,7 @@ class MapHero {
 
         let Xboomb = Math.floor(this.x);
         let Yboomb = Math.floor(this.y);
+        getboombcord(this.x/32,this.y/32)
         mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=1
         newseconede =new Date().getSeconds()
         // console.log("this seconde",newseconede)
@@ -753,17 +773,21 @@ class MapHero {
         
         setTimeout(() => {
 
-
+            this.boombandenemy(Xboomb/32,Yboomb/32)
             this.boombandhero((Xboomb)/32,Yboomb/32)
             mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
             boomb.remove();  
         }, 6000);
-
-
-
-
+  
     }
 
+    boombandenemy(Xboomb,Yboomb){
+        if   (killenemy(Xboomb,enemycord[0],Yboomb,enemycord[1])<2){
+            console.log("destroy enemy in grid",enemycord[0],enemycord[1])
+        }
+        
+
+    }
 
     boombandhero(Xboomb,Yboomb){
         console.log("sssssssssssssssssssssssssss",Math.floor(this.x/32),Math.floor(this.y/32))
@@ -910,7 +934,7 @@ window.addEventListener('load', () => {
 let level1 = new mapClass
 level1.drawMap(mapArray)
 //how much you want to contral the level
-const h = new EnemyGenerator(mapSence, 2)  
+const h = new EnemyGenerator(mapSence, 1)  
 
  
 
