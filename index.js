@@ -675,7 +675,10 @@ class MapHero {
         return false;
     }  
  
-    creatboomb(x,y){
+     
+         creatboomb(x,y){
+ 
+
         let Xboomb = Math.floor(this.x);
         let Yboomb = Math.floor(this.y);
         mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=1
@@ -683,6 +686,8 @@ class MapHero {
         // console.log("this seconde",newseconede)
         // console.log("creatboomb in xy*:",Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))
   
+
+        
              
            
  
@@ -696,6 +701,7 @@ class MapHero {
             boomb.style.backgroundImage=`url(${boombimage.src})`
     
             boomb.style.transform = `translate3d(${Xboomb}px, ${Yboomb}px, 0px)`;
+            // boomb.style.display="none"
             
             mapSence.appendChild(boomb);
                     
@@ -712,14 +718,29 @@ class MapHero {
         
 
 
-
  
+
+        // setTimeout(
+        //     function(boomb,Xboomb,Yboomb) {
+        //         mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
+        //         boomb.remove();
+            
+        //         newseconede=0
+        //     }, 6000);
+
+        
+        setTimeout(() => {
+            mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
+            boomb.remove();  
+        }, 6000);
 
 
 
 
     }
- 
+
+     
+     
     moveHero() {
          const direction = this.pressedDirections[0];
         let newX = this.x;
