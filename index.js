@@ -12,6 +12,8 @@ function getboombcord(x,y){
     boombcord[1],y
 }
 
+let enemysholdkill=false
+
 
 
 
@@ -373,7 +375,7 @@ class Enemy {
     }
 
     createEnemyono() {
-        const enemy = document.createElement("div");
+        let enemy = document.createElement("div");
         enemy.style.width = "32px";
         enemy.style.height = "32px";
         // enemy.style.backgroundColor = "purple";
@@ -430,6 +432,11 @@ class Enemy {
     move() {
 
         getenemycord(this.pixelX/32,this.pixelY/32)
+
+        if (enemysholdkill==true){
+            enemysholdkill=false
+            this.element.remove()
+        }
 
         
  
@@ -782,8 +789,9 @@ class MapHero {
     }
 
     boombandenemy(Xboomb,Yboomb){
-        if   (killenemy(Xboomb,enemycord[0],Yboomb,enemycord[1])<2){
-            console.log("destroy enemy in grid",enemycord[0],enemycord[1])
+        if   (killenemy(Xboomb,enemycord[0],Yboomb,enemycord[1])<3){
+            // console.log("destroy enemy in grid",enemycord[0],enemycord[1])
+            enemysholdkill=true
         }
         
 
