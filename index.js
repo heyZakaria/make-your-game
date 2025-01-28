@@ -566,7 +566,7 @@ const heroConfig = {
     tileSize: 32,
     initialGridX: 1, 
     initialGridY: 1,
-    speed: 6
+    speed: 2
 };
 
 const directions = {
@@ -779,15 +779,73 @@ class MapHero {
 
         
         setTimeout(() => {
-
+            this.boombandbriks(Math.ceil(Xboomb/32), Math.ceil(Yboomb/32))
             this.boombandenemy(Xboomb/32,Yboomb/32)
             this.boombandhero((Xboomb)/32,Yboomb/32)
             mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
             boomb.remove();  
-        }, 6000);
+        }, 300);
   
     }
 
+    boombandbriks(Xboomb,Yboomb){
+
+        let xbriks=-1
+        let ybriks=-1
+        let letsboomb=false
+
+        if (mapArray[Yboomb+1][Xboomb]===2){
+            xbriks=Yboomb+1
+            ybriks=Xboomb
+            letsboomb=true
+            
+        }
+        if (mapArray[Yboomb][Xboomb+1]===2){
+
+            xbriks=Yboomb
+            ybriks=Xboomb+1
+            letsboomb=true
+
+            
+        }
+        if (mapArray[Yboomb-1][Xboomb]===2){
+            console.log("#############")
+
+            xbriks=Yboomb-1
+            ybriks=Xboomb
+            
+            letsboomb=true
+
+        }
+        if (mapArray[Yboomb][Xboomb-1]===2){
+
+            xbriks=Yboomb
+            ybriks=Xboomb-1
+            letsboomb=true
+
+        }
+        if (letsboomb){
+ 
+             mapArray[xbriks][ybriks]=1
+
+
+                      let gress = document.createElement("div")
+                        gress.style.backgroundImage = `url(${greenBlockImage.src})`
+                        gress.style.width = tileSize + "px"
+                        gress.style.height = tileSize + "px"
+                        gress.style.transform = `translate3d(${ybriks*32}px ,${32*xbriks}px,  0px)`
+
+                        gress.style.position = "absolute"
+                        mapSence.appendChild(gress)
+        } 
+   
+    
+
+
+     
+
+
+    }
     boombandenemy(Xboomb,Yboomb){
         if   (killenemy(Xboomb,enemycord[0],Yboomb,enemycord[1])<3){
             // console.log("destroy enemy in grid",enemycord[0],enemycord[1])
@@ -798,7 +856,7 @@ class MapHero {
     }
 
     boombandhero(Xboomb,Yboomb){
-        console.log("sssssssssssssssssssssssssss",Math.floor(this.x/32),Math.floor(this.y/32))
+        // console.log("sssssssssssssssssssssssssss",Math.floor(this.x/32),Math.floor(this.y/32))
 
         let herox=this.x/32
         let heroy=this.y/32
