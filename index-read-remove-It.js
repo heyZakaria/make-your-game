@@ -1,72 +1,52 @@
-// When the block is destroyed and becomes gress, The Hero go below the gress
-// Maybe because we draw the map in index.js and bomberman.js
-
 let mapSence = document.getElementById("map")
-var enemycord = [-1, -1]
-var herocord = [2, 2]
-var boombcord = [0, 0]
+var enemycord=[-1,-1]
+ var herocord=[2,2]
 
-// This is Set NOT Get
-function getenemycord(x, y) {
-    enemycord[0] = x
-    enemycord[1] = y
+function getenemycord(x,y){
+    enemycord[0]=x
+    enemycord[1]=y
 }
 
-// This is Set NOT Get
-function getboombcord(x, y) {
-    boombcord[0], x
-    boombcord[1], y
+function getherocord(x,y){
+    herocord[0]=x
+    herocord[1]=y
 }
 
-let enemysholdkill = false
-
-// This is Set NOT Get
-function getherocord(x, y) {
-    herocord[0] = x
-    herocord[1] = y
-}
-
-function killhero(xa, xb, ya, yb) {
-    return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb))
-}
-
-function killenemy(xa, xb, ya, yb) {
-    return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb))
+function killhero(xa,xb,ya,yb){
+    return Math.sqrt((xa-xb)*(xa-xb)+(ya-yb)*(ya-yb))
 
 }
+let cnt=0
 
-
-let isboombed = false
-
-let newseconede = 0
 
 
 let mapArray = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,0,0,0,0,0,0,,0,0,0,0,0,0],
+
+     [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,0,0,0,0,0,0,0,0,,0,0,0,0,0,0],
+
+
 ]
 
 
-let mapboom = []
+let mapboom=[]
+
 
 let tileSize = 32;
 let mapX = 0
@@ -75,45 +55,41 @@ let mapY = -32
 let tileImage = new Image
 let blockImage = new Image
 let greenBlockImage = new Image
-let enemymoveemage = new Image
-let boombimage = new Image
+let enemymoveemage=new Image
+let boombimage =new Image
 
 tileImage.src = `./assets/tile.png`
 blockImage.src = `./assets/block.png`
 greenBlockImage.src = `./assets/greenBlock.png`
-enemymoveemage.src = `./assets/enemy.png`
-boombimage.src = `./assets/bomb.png`
+enemymoveemage.src=`./assets/enemy.png`
+boombimage.src= `./assets/bomb.png`
 
 
 
-console.log(mapArray.length);
-console.log(mapArray.length * 32);
 class mapClass {
 
     constructor(tileSize) {
-        // there is no need for those
-        // we can just change in the mapArray directly to control the map size
-        // this.height = tileSize  * mapArray.length
-        // this.width = tileSize  * mapArray[0].length
+        this.height = tileSize * 2 * mapArray.length
+        this.width = tileSize * 2 * mapArray[0].length
     }
-
 
     drawMap = function (mapArr) {
 
-
-        let i = 0
-        let j = 0
+ 
+        let i=0
+let j=0
         for (let row of mapArr) {
-            i++
-            j = 0
+i++
+j=0
             mapX = 0
             mapY += 32
             for (let column of row) {
-                j++
+j++
+ 
+                if (Math.random() <0.1&& column == 1) {
 
-                if (Math.random() < 0.1 && column == 1) {
-                    // ??????????????????
-                    mapArray[i - 1][j - 1] = 2
+                      mapArray[i-1][j-1]=2
+ 
 
                     column = 2
                 }
@@ -133,7 +109,6 @@ class mapClass {
                         mapX += tileSize
                         break;
                     case 1:
-                    case 3:
 
                         let gress = document.createElement("div")
                         gress.style.backgroundImage = `url(${greenBlockImage.src})`
@@ -153,12 +128,14 @@ class mapClass {
 
                         canBomb.style.transform = `translate3d(${mapX}px ,${mapY}px,  0px)`
 
+
+
                         canBomb.style.position = "absolute"
                         mapSence.appendChild(canBomb)
                         mapX += tileSize
 
                         break
-
+                         
 
                 }
             }
@@ -181,13 +158,13 @@ class mapClass {
 
 
 
+ 
 
 
 
 
 
-
-
+ 
 
 
 
@@ -219,7 +196,7 @@ class mapClass {
 //     }
 
 //     getRandomDirection() {
-
+ 
 //         const directions = ['up', 'down', 'left', 'right'];
 //         return directions[Math.floor(Math.random() * directions.length)];
 //     }
@@ -231,98 +208,98 @@ class mapClass {
 //         let X=this.x/32
 //         let Y=this.y/32
 //         console.log("X,Y:",X,Y)
-
+        
 //         console.log("",mapArray[Math.floor(Y)][Math.floor(X)])
 //         console.log("",mapArray[Math.ceil(Y)][Math.ceil(X)])
 
-
-
-
-
+        
+        
+    
+        
 //         switch (this.direction) {
 
-
-
+            
+    
 //             case 'up':
-
+    
 //                 // if (mapArray[Math.floor(Y-(this.moveSpeed/32))][Math.floor(X)]==1){
 //                     if ((mapArray[Math.floor(Y-this.moveSpeed)][Math.floor(X)]==1) && (mapArray[Math.ceil(Y-this.moveSpeed)][Math.ceil(X)])===1)
 //  {   
 //                      this.y -= this.moveSpeed;
 //                          break
 //                 }
-
+                
 //             case 'down':
 //                 // console.log("yeeeeeeeeeeeeeeeeeeep",mapArray[Math.floor(Y)][Math.floor(X)])
-
+    
 //                 // if (mapArray[Math.floor(Y+(this.moveSpeed/32))][Math.floor(X)]==1){
-
+    
 //                 if ((mapArray[Math.floor(Y +this.moveSpeed)][Math.floor(X)]==1) && (mapArray[Math.ceil(Y+this.moveSpeed)][Math.ceil(X)])===1)
 // {
 //                 this.y += this.moveSpeed;
 //                 break
 //     }
-
-
+    
+    
 //             case 'left':
 //                 // console.log("yeeeeeeeeeeeeeeeeeeep",mapArray[Math.floor(Y)][Math.floor(X)])
-
+    
 //                 if ((mapArray[Math.floor(Y)][Math.floor(X-(this.moveSpeed/32))]==1) && (mapArray[Math.ceil(Y)][Math.ceil(X-(this.moveSpeed/32))])===1)
 //                     {
-
-
+    
+    
 //                 this.x -= this.moveSpeed;
 //                 break;
 //                 }
-
+            
 //             case 'right':
 //                 // console.log("yeeeeeeeeeeeeeeeeeeep",mapArray[Math.floor(Y)][Math.floor(X)])
-
+    
 //             // if (mapArray[Math.floor(Y)][Math.floor(X+(this.moveSpeed/32))]==1){
 //                 if ((mapArray[Math.floor(Y)][Math.floor(X+(this.moveSpeed/32))]===1) && (mapArray[Math.ceil(Y)][Math.ceil(X+(this.moveSpeed/32))])===1)
-
+    
 //                 this.x += this.moveSpeed;
 //                 break;
 //              }          
-
-
-
+    
+        
+    
 //         // if after map change direction
-
-
-
-
-
-
-
+    
+    
+    
+   
+    
+    
+    
 //         if (this.x < 32 )   {
-
+            
 //             this.x = 32
 //             this.direction = 'right'
 //         }
 //         if (this.x > (mapArray[0].length - 2) * 32)   {
-
+    
 //             this.x = (mapArray[0].length - 2) * 32
 //             this.direction = 'left'
 //         }
 //         if (this.y < 32){
-
+    
 //             this.y = 32
-
+        
 //             this.direction = 'down'
 //         }
 //         if (this.y > (mapArray.length - 2) * 32){
-
-
+   
+    
 //             this.y = (mapArray.length - 2) * 32
 //             this.direction = 'up'
 //         }
-
-
+        
+    
 //         //update statu
 //         this.update()
 //     }    
-
+    
 
 //     update() {
 //         let X=this.x/32
@@ -330,16 +307,16 @@ class mapClass {
 //         // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
 //         if (mapArray[Math.floor(Y)][Math.floor(X)]!=1){
-
-
-
+ 
+ 
+ 
 //             console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",X,Y)
-
+         
 //          }
-
-
+        
+         
 //         this.element.style.transform = `translate3d(${this.x}px, ${this.y}px, 0px)`;
-
+     
 // }
 
 //     startMoving() {
@@ -349,9 +326,9 @@ class mapClass {
 //         }, Math.random() * 2000 + 1000)   
 
 //         //move contine 
-
+        
 //             this.moveInterval = setInterval(() => {
-
+                
 //                 this.move();
 
 
@@ -359,20 +336,19 @@ class mapClass {
 //     }
 // }
 
-// () ????????????????
 killhero
-
+ 
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 
 class Enemy {
     constructor(x, y) {
-        //setup grid then >>>(simple32) grid to pixel !
+//setup grid then >>>(simple32) grid to pixel !
         this.gridX = Math.floor(x / 32);
         this.gridY = Math.floor(y / 32);
-
+        
         this.pixelX = this.gridX * 32;
         this.pixelY = this.gridY * 32;
-        this.element = this.createEnemyono();
+         this.element = this.createEnemyono();
         this.direction = this.getRandomDirection();
         this.moveSpeed = 2;
         this.moveInterval = null;
@@ -380,41 +356,40 @@ class Enemy {
     }
 
     createEnemyono() {
-        let enemy = document.createElement("div");
+        const enemy = document.createElement("div");
         enemy.style.width = "32px";
         enemy.style.height = "32px";
-        enemy.style.backgroundImage = `url(${"./assets/enemy.png"})`
-        // enemy.style.position = "absolute";
+        // enemy.style.backgroundColor = "purple";
+     enemy.style.backgroundImage=`url(${"./assets/enemy.png"})`
+        enemy.style.position = "absolute";
         enemy.style.transform = `translate3d(${this.pixelX}px, ${this.pixelY}px, 0px)`;
         return enemy;
     }
 
-
-
     getRandomDirection() {
         const validDirections = this.getValidDirections();
         // no chane if lenght 0
-        //LENGHT==0 SO CONTINU SAME DIRECTION 
-        if (validDirections.length === 0) {
-            return this.direction;
+       //LENGHT==0 SO CONTINU SAME DIRECTION 
+        if (validDirections.length === 0){
+            return this.direction; 
 
-        }
+        } 
         return validDirections[Math.floor(Math.random() * validDirections.length)];
     }
 
     getValidDirections() {
         const directions = [];
-
+        
         // Check if valid dirxection*4
-        if (this.isValidCARE(this.gridX, this.gridY - 1)) {
-            directions.push('up');
-        }
-        if (this.isValidCARE(this.gridX, this.gridY + 1)) {
+        if (this.isValidCARE(this.gridX, this.gridY - 1)){
+             directions.push('up');
+    }
+        if (this.isValidCARE(this.gridX, this.gridY + 1)){
             directions.push('down');
-        }
-        if (this.isValidCARE(this.gridX - 1, this.gridY)) {
+        } 
+        if (this.isValidCARE(this.gridX - 1, this.gridY)){
             directions.push('left');
-        }
+        } 
         if (this.isValidCARE(this.gridX + 1, this.gridY)) {
             directions.push('right');
         }
@@ -423,26 +398,21 @@ class Enemy {
     }
 
     isValidCARE(x, y) {
-        //    ris valid if green
-        if (mapArray[y][x] != 1) {
-            return false
-        } else {
+    //    ris valid if green
+    if (mapArray[y][x]!=1){
+        return false
+    }else{
+        
+         return mapArray[y][x] ==1; // if ok  if green !!!
 
-            return mapArray[y][x] === 1; // if ok  if green !!!
-
-        }
+    }
     }
 
     move() {
 
-        getenemycord(this.pixelX / 32, this.pixelY / 32)
-
-        if (enemysholdkill == true) {
-            enemysholdkill = false
-            // Do the animation then remove it 
-            this.element.remove()
-        }
-
+        getenemycord(this.pixelX/32,this.pixelY/32)
+                
+ 
 
         if (this.isMoving) return;
 
@@ -451,11 +421,10 @@ class Enemy {
 
         // Calculate target grid position based on direction
         ///caculer 
-
         switch (this.direction) {
-            case 'left': nextGridX--; break;
             case 'up': nextGridY--; break;
             case 'down': nextGridY++; break;
+            case 'left': nextGridX--; break;
             case 'right': nextGridX++; break;
         }
 
@@ -469,28 +438,29 @@ class Enemy {
         this.isMoving = true;
         const NEXTPixelX = nextGridX * 32;
         const NEXTPixelY = nextGridY * 32;
-
+        
         const moveTonext = () => {
             let ARREVETOTARGER = false;
-
+            
             // Move towards target position
             if (this.pixelX < NEXTPixelX) {
                 this.pixelX += this.moveSpeed;
             }
-            if (this.pixelX > NEXTPixelX) {
-                this.pixelX -= this.moveSpeed;
-            }
+                if (this.pixelX > NEXTPixelX) {
+                    this.pixelX -= this.moveSpeed;
+                }
             if (this.pixelY < NEXTPixelY) {
                 this.pixelY += this.moveSpeed;
             }
-            if (this.pixelY > NEXTPixelY) {
-                this.pixelY -= this.moveSpeed;
-            }
+                if (this.pixelY > NEXTPixelY)
+                    {
+                         this.pixelY -= this.moveSpeed;
+                    }
             // Check if ITS OK I ARRIVE TO MY GOAL TO MY TARGER 
             // THE DISTENCE BETWEN TO POINT XA AND XB ITS JUST  THE DEFFERENCE BETWEN |XA - XB|  CHEK MY FILE RAPPELEMATHEMATIQUE.TXT TO LEARN MORE 
             const diffX = Math.abs(this.pixelX - NEXTPixelX);
             const diffY = Math.abs(this.pixelY - NEXTPixelY);
-
+            
             if (diffX < this.moveSpeed && diffY < this.moveSpeed) {
                 // Snap to gr
                 this.pixelX = NEXTPixelX;
@@ -505,7 +475,6 @@ class Enemy {
             if (ARREVETOTARGER) {
                 this.isMoving = false;
             } else {
-                // search how you can make it in the start of this func
                 requestAnimationFrame(moveTonext);
             }
         };
@@ -523,8 +492,8 @@ class Enemy {
             if (!this.isMoving) {
                 this.direction = this.getRandomDirection();
             }
-            // }, Math.random() * 2000 + 1000);
-        }, 500);
+        }, Math.random() * 2000 + 1000);
+
 
         this.moveInterval = setInterval(() => {
             if (!this.isMoving) {
@@ -548,7 +517,7 @@ class EnemyGenerator {
             this.createEnemy();
         }
     }
-    //as always grid then pixel operation >>>> *32
+//as always grid then pixel operation >>>> *32
     createEnemy() {
         let x, y;
         do {
@@ -560,7 +529,7 @@ class EnemyGenerator {
         this.enemies.push(enemy);
         this.map.appendChild(enemy.element);
         enemy.startMoving();
-
+    
     }
 
 
@@ -568,9 +537,9 @@ class EnemyGenerator {
 
 const heroConfig = {
     tileSize: 32,
-    initialGridX: 1,
+    initialGridX: 1, 
     initialGridY: 1,
-    speed: 2
+    speed: 5
 };
 
 const directions = {
@@ -578,7 +547,7 @@ const directions = {
     down: "ArrowDown",
     left: "ArrowLeft",
     right: "ArrowRight",
-};
+ };
 
 const keys = {
     ArrowUp: directions.up,
@@ -592,8 +561,8 @@ class MapHero {
         this.x = heroConfig.initialGridX * heroConfig.tileSize;
         this.y = heroConfig.initialGridY * heroConfig.tileSize;
 
-
-
+       
+      
         this.heroImgages = {
             [directions.up]: new Image(),
             [directions.down]: new Image(),
@@ -606,34 +575,34 @@ class MapHero {
         this.heroImgages[directions.down].src = './assets/move_down.png';
         this.heroImgages[directions.left].src = './assets/move_left.png';
         this.heroImgages[directions.right].src = './assets/move_right.png';
-        this.heroImgages[directions.destroy].src = './assets/destroy_hero.png'
-
-
-        this.heroWidth = 32;
-        this.heroHeight = 32;
+        this.heroImgages[directions.destroy].src='./assets/destroy_hero.png'
+        
+     
+        this.heroWidth = 32; 
+        this.heroHeight = 32; 
 
         this.currentDirection = directions.down;
         this.frameIndex = 0;
         this.stepCount = 0;
         this.stepsPerFrame = 5;
-
+        
         this.element = document.createElement('div');
         this.element.style.width = `${heroConfig.tileSize}px`;
         this.element.style.height = `${heroConfig.tileSize}px`;
         this.element.style.position = "absolute";
         this.element.style.overflow = "hidden";
-
+        
         mapSence.appendChild(this.element);
-
+    
         this.pressedDirections = [];
-
+        
         this.initializeControls();
         this.startGameLoop();
     }
     initializeControls() {
         document.addEventListener("keydown", (e) => {
             const dir = keys[e.key];
-            // console.log("dir",dir)
+            console.log("dir",dir)
             if (dir && this.pressedDirections.indexOf(dir) === -1) {
                 this.pressedDirections.unshift(dir);
             }
@@ -666,252 +635,116 @@ class MapHero {
 
 
 
-        let cemoment = new Date().getSeconds()
-
-        console.log(cemoment, "cemoment")
-        console.log("newseconde", newseconede)
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////
-
-        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1) && ((mapboom[gridX, gridY] != 1) || (((mapboom[gridX, gridY] === 1 && (cemoment) - newseconede) < 2)))) {
-            // (mapArray[gridY][gridX]) === 2)) { 
-            // console.log("this is newseconde seconde frotxk  ",newseconede)
 
 
 
 
+        ////////////////////////////////////////////////////////////////////
+    
+        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1 && mapboom[gridX+gridY]!=1)){ 
+            console.log("1111111can move x",gridX)
+        // (mapArray[gridY][gridX]) === 2)) { 
+           
             const topRightX = Math.floor((newX + tileSize - 1) / tileSize);
             const bottomleftY = Math.floor((newY + tileSize - 1) / tileSize);
             const bottomRightX = Math.floor((newX + tileSize - 1) / tileSize);
             const bottomRightY = Math.floor((newY + tileSize - 1) / tileSize);
             // console.log("LA MAAAAAAAAP",mapboom[grid]);
-            return (
-
-                (mapArray[Math.floor(newY / tileSize)][topRightX] === 1) &&
-
+             return (
+                
+                (mapArray[Math.floor(newY / tileSize)][topRightX] === 1  && mapboom[gridX+gridY]!=1 )&& 
+ 
                 //  mapArray[Math.floor(newY / tileSize)][topRightX] === 2) &&
-                (mapArray[bottomleftY][gridX] === 1) &&
-
-                // || mapArray[bottomleftY][gridX] === 2) &&
-                (mapArray[bottomRightY][bottomRightX] === 1)
-
-
+                (mapArray[bottomleftY][gridX] === 1  && mapboom[gridX+gridY]!=1) &&
+ 
+                    // || mapArray[bottomleftY][gridX] === 2) &&
+                (mapArray[bottomRightY][bottomRightX] === 1  && mapboom[gridX+gridY]!=1 )
+                
+                
                 //  mapArray[bottomRightY][bottomRightX] === 2)
             );
         }
-
+                        
         return false;
-    }
-
-    // destroyboomb(boomb,seconde,Xboomb,Yboomb){
-    //     let cemoment=new Date().getSeconds()
-    //     let delta=cemoment-seconde
-
-    //     call this.destroyboomb fter delta seconde 
-
-
-    //     if (cemoment- seconde>4){
-    //         mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
-    //         boomb.style.display="none"
-
-    //         newseconede=0
-
-
-    // }else{
-    //  this.destroyboomb(cemoment,Xboomb,Yboomb)
-    // }
-
-
-
-
-
-
-    creatboomb(x, y) {
-        isboombed = true
-
+    }  
+ 
+    creatboomb(x,y){
         let Xboomb = Math.floor(this.x);
         let Yboomb = Math.floor(this.y);
-        getboombcord(this.x / 32, this.y / 32)
-        mapboom[(Math.floor((Xboomb) / 32), Math.floor((Yboomb) / 32))] = 1
-        newseconede = new Date().getSeconds()
-        // console.log("this seconde",newseconede)
-        // console.log("creatboomb in xy*:",Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))
+        mapboom[Math.floor(Xboomb+Yboomb)/32]=1
+        console.log("222222222CTRATBOOMBx",Xboomb/32)
+        console.log("2222222222ctraetbomby",Yboomb/32)
+        console.log("XXX",cnt)
+ 
+             
+           
+        cnt++
+
+     
+            let boomb = document.createElement('div');
+            boomb.style.width = `${heroConfig.tileSize}px`;
+            boomb.style.height = `${heroConfig.tileSize}px`;
+            boomb.style.position = "absolute";
+            boomb.style.overflow = "hidden";
+            // boomb.style.backgroundColor="red"
+            boomb.style.backgroundImage=`url(${boombimage.src})`
+    
+            boomb.style.transform = `translate3d(${Xboomb}px, ${Yboomb}px, 0px)`;
+            
+            mapSence.appendChild(boomb);
+                    
+    
+    
+    
+     
+    
+             
+                    console.log("xxxxxxxxxxxxxxxxxxxxx")
+               
+                 
+            
+        
 
 
 
-
-
-
-
-        let boomb = document.createElement('div');
-        boomb.style.width = `${32}px`;
-        boomb.style.height = `${32}px`;
-        boomb.style.position = "absolute";
-        boomb.style.overflow = "hidden";
-        // boomb.style.backgroundColor="red"
-        boomb.style.backgroundImage = `url(${boombimage.src})`
-
-        boomb.style.transform = `translate3d(${Xboomb}px, ${Yboomb}px, 0px)`;
-        // boomb.style.display="none"
-
-        mapSence.appendChild(boomb);
-
-
-
-
-
-
-
-        // console.log("xxxxxxxxxxxxxxxxxxxxx")
-
-
-
-
-
-
-
-
-        // setTimeout(
-        //     function(boomb,Xboomb,Yboomb) {
-        //         mapboom[(Math.floor((Xboomb)/32),Math.floor((Yboomb)/32))]=0
-        //         boomb.remove();
-
-        //         newseconede=0
-        //     }, 6000);
-
-
-        setTimeout(() => {
-            this.boombandbriks(Math.ceil(Xboomb / 32), Math.ceil(Yboomb / 32))
-            this.boombandenemy(Xboomb / 32, Yboomb / 32)
-            this.boombandhero((Xboomb) / 32, Yboomb / 32)
-            mapboom[(Math.floor((Xboomb) / 32), Math.floor((Yboomb) / 32))] = 0
-            boomb.remove();
-        }, 300);
-
-    }
-
-    boombandbriks(Xboomb, Yboomb) {
-
-        let xbriks = -1
-        let ybriks = -1
-        let letsboomb = false
-
-        if (mapArray[Yboomb + 1][Xboomb] === 2) {
-            xbriks = Yboomb + 1
-            ybriks = Xboomb
-            letsboomb = true
-
-        }
-        if (mapArray[Yboomb][Xboomb + 1] === 2) {
-
-            xbriks = Yboomb
-            ybriks = Xboomb + 1
-            letsboomb = true
-
-
-        }
-        if (mapArray[Yboomb - 1][Xboomb] === 2) {
-            console.log("#############")
-
-            xbriks = Yboomb - 1
-            ybriks = Xboomb
-
-            letsboomb = true
-
-        }
-        if (mapArray[Yboomb][Xboomb - 1] === 2) {
-
-            xbriks = Yboomb
-            ybriks = Xboomb - 1
-            letsboomb = true
-
-        }
-        if (letsboomb) {
-
-            mapArray[xbriks][ybriks] = 1
-
-
-            let gress = document.createElement("div")
-            gress.style.backgroundImage = `url(${greenBlockImage.src})`
-            gress.style.width = tileSize + "px"
-            gress.style.height = tileSize + "px"
-            gress.style.transform = `translate3d(${ybriks * 32}px ,${32 * xbriks}px,  0px)`
-
-            gress.style.position = "absolute"
-            mapSence.appendChild(gress)
-        }
-
-
-
+ 
 
 
 
 
     }
-    boombandenemy(Xboomb, Yboomb) {
-        if (killenemy(Xboomb, enemycord[0], Yboomb, enemycord[1]) < 3) {
-            // console.log("destroy enemy in grid",enemycord[0],enemycord[1])
-            enemysholdkill = true
-        }
-
-
-    }
-
-    boombandhero(Xboomb, Yboomb) {
-        // console.log("sssssssssssssssssssssssssss",Math.floor(this.x/32),Math.floor(this.y/32))
-
-        let herox = this.x / 32
-        let heroy = this.y / 32
-        if (killhero(Xboomb, herox, Yboomb, heroy) < 1) {
-
-            // this.element.style.backgroundImage=`url(${"./assets/destroy_hero.png"})`
-            this.currentDirection = directions.destroy;
-
-
-            // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        }
-
-
-
-
-    }
-
-
-
-
+ 
     moveHero() {
-        const direction = this.pressedDirections[0];
+         const direction = this.pressedDirections[0];
         let newX = this.x;
         let newY = this.y;
-
-        getherocord(this.x / 32, this.y / 32)
+    
+         getherocord(this.x/32,this.y/32)
         //  console.log("getenemycord getherocord",herocord,enemycord)
         // console.log("DISTENCE:",killhero(enemycord[0],herocord[0],enemycord[1],herocord[1]))
-        if (killhero(enemycord[0], herocord[0], enemycord[1], herocord[1]) < 1) {
+          if (killhero(enemycord[0],herocord[0],enemycord[1],herocord[1])<1){
 
             // this.element.style.backgroundImage=`url(${"./assets/destroy_hero.png"})`
-            this.currentDirection = directions.destroy;
+             this.currentDirection = directions.destroy;
 
 
-            // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        }
+            console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+          }
+
+       
+         
 
 
-
-
-
-
+        
         if (direction) {
-
+            
             this.stepCount++;
             if (this.stepCount > this.stepsPerFrame) {
                 this.stepCount = 0;
                 this.frameIndex = (this.frameIndex + 1) % 3;
             }
-
-            switch (direction) {
+            
+            switch(direction) {
                 case directions.right:
                     newX = this.x + heroConfig.speed;
                     this.currentDirection = directions.right;
@@ -933,39 +766,38 @@ class MapHero {
                     break;
 
             }
-
+            
             if (this.canMove(newX, newY)) {
                 this.x = newX;
                 this.y = newY;
-
+                
                 document.addEventListener("keydown", (e) => {
+          
+
+                    if (e.key=="x"){
+                         this.creatboomb(this.x,this.y)
 
 
-                    if (e.key == "x") {
-                        this.creatboomb(this.x, this.y)
 
-
-
-                    }
-                })
-
-
+            } } )
 
 
 
 
-            }
+
+
+             }
         } else {
             this.frameIndex = 0;
             this.stepCount = 0;
         }
-
+        
         this.render();
     }
 
     render() {
         const curHeroDirection = this.heroImgages[this.currentDirection];
-
+        
         this.element.style.backgroundImage = `url(${curHeroDirection.src})`;
         this.element.style.backgroundPosition = `-${this.frameIndex * this.heroWidth}px 0px`;
         this.element.style.left = `${this.x}px`;
@@ -975,7 +807,7 @@ class MapHero {
     startGameLoop() {
         const gameLoop = () => {
             this.moveHero();
-
+            
             window.requestAnimationFrame(gameLoop);
         };
         gameLoop();
@@ -984,7 +816,7 @@ class MapHero {
 
 window.addEventListener('load', () => {
     const hero = new MapHero(mapSence);
-});
+}); 
 
 
 
@@ -994,7 +826,7 @@ window.addEventListener('load', () => {
 
 
 
-
+ 
 
 
 
@@ -1005,9 +837,9 @@ window.addEventListener('load', () => {
 let level1 = new mapClass
 level1.drawMap(mapArray)
 //how much you want to contral the level
-const h = new EnemyGenerator(mapSence, 100)
+const h = new EnemyGenerator(mapSence, 2)  
 
-
+ 
 
 
 
@@ -1115,7 +947,7 @@ const h = new EnemyGenerator(mapSence, 100)
 
 
 
-
+ 
 
 
 
