@@ -32,7 +32,7 @@ function setHeroCoords(x, y) {
 }
 
 function killHero(xa, xb, ya, yb) {
-    return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb))
+    return (Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)) < 3)
 }
 
 
@@ -212,7 +212,7 @@ export class MapHero {
 
         let herox = this.x / 32
         let heroy = this.y / 32
-        if (killHero(Xboomb, herox, Yboomb, heroy) < 1) {
+        if (killHero(Xboomb, herox, Yboomb, heroy) ) {
 
             this.currentDirection = directions.destroy;
 
@@ -227,7 +227,7 @@ export class MapHero {
         let newY = this.y;
 
         setHeroCoords(this.x / 32, this.y / 32)
-        if (killHero(enemyCoords[0], herocord[0], enemyCoords[1], herocord[1]) < 1) {
+        if (killHero(enemyCoords[0], herocord[0], enemyCoords[1], herocord[1])) {
 
             this.currentDirection = directions.destroy;
         }
