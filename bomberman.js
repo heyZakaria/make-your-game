@@ -32,7 +32,7 @@ function setHeroCoords(x, y) {
 }
 
 function killHero(xa, xb, ya, yb) {
-    return (Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)) < 3)
+    return (Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)) < 1)
 }
 
 
@@ -190,15 +190,11 @@ export class MapHero {
         if (letsboomb) {
 
             mapArray[xbriks][ybriks] = 1
-
-            let gress = document.createElement("div")
-            gress.style.backgroundImage = `url(${greenBlockImage.src})`
-            gress.style.width = 32 + "px"
-            gress.style.height = 32 + "px"
-            gress.style.transform = `translate3d(${ybriks * 32}px ,${32 * xbriks}px,  0px)`
-
-            gress.style.position = "absolute"
-            mapSence.appendChild(gress)
+            console.log(xbriks, ybriks, "DDDDdddd");
+            
+           let brickBombed = document.querySelector(`.canBomb_${ybriks*32}_${xbriks*32}`)
+           brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
+                     
         }
     }
 
@@ -230,6 +226,7 @@ export class MapHero {
         if (killHero(enemyCoords[0], herocord[0], enemyCoords[1], herocord[1])) {
 
             this.currentDirection = directions.destroy;
+            
         }
 
 
@@ -245,6 +242,7 @@ export class MapHero {
                 case directions.right:
                     newX = this.x + heroConfig.speed;
                     this.currentDirection = directions.right;
+                    
                     break;
                 case directions.left:
                     newX = this.x - heroConfig.speed;
@@ -268,8 +266,8 @@ export class MapHero {
                 this.x = newX;
                 this.y = newY;
 
+                // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 document.addEventListener("keydown", (e) => {
-
 
                     if (e.key == "x") {
                         this.createBomb(this.x, this.y)
@@ -291,8 +289,11 @@ export class MapHero {
 
         this.element.style.backgroundImage = `url(${curHeroDirection.src})`;
         this.element.style.backgroundPosition = `-${this.frameIndex * this.heroWidth}px 0px`;
-        this.element.style.left = `${this.x}px`;
-        this.element.style.top = `${this.y}px`;
+        // AAAAAAAAAAAAAAAAAAAAAAAAAAA
+        this.element.style.transform = `translate3d(${this.x}px ,${this.y}px,  2px)`
+
+        /* this.element.style.left = `${this.x}px`;
+        this.element.style.top = `${this.y}px`; */
     }
 
     startGameLoop() {

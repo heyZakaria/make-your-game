@@ -55,9 +55,12 @@ let level1 = new mapClass
 level1.drawMap(mapArray)
 
 //how much you want to contral the level
-const h = new EnemyGenerator(mapSence, 20)
 
 
-window.addEventListener('load', () => {
-    const hero = new MapHero(mapSence);
+window.addEventListener('keydown', (e) => {
+    if (e.code == "KeyP") {
+        const h = new EnemyGenerator(mapSence, 5)
+        
+        const hero = new MapHero(mapSence);
+    }
 });
