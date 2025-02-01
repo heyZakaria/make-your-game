@@ -1,6 +1,6 @@
 import { enemyCoords } from "./index.js";
 import { mapArray } from "./map.js";
-import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy} from "./index.js";
+import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy } from "./index.js";
 
 let mapSence = document.getElementById("map")
 
@@ -63,7 +63,7 @@ export class MapHero {
         this.currentDirection = directions.down;
         this.frameIndex = 0;
         this.stepCount = 0;
-        this.stepsPerFrame = 5;
+        this.stepsPerFrame = 10;
 
         this.element = document.createElement('div');
         this.element.style.width = `${heroConfig.tileSize}px`;
@@ -101,16 +101,35 @@ export class MapHero {
         const gridY = Math.floor(newY / tileSize);
 
         let cemoment = new Date().getSeconds()
+        let posX = (newX%tileSize)/tileSize
+        let posY = (newY%tileSize)/tileSize
+        console.log("POSX=>", posX,"\nPOSY=>", posY);
+        
+        //On essaye de diviser le bomberman en 4 carrees et on calcul 
+        //si les parties du bomberman sont colles au mur sinon il va bouger, pas de collision
+        
+        //Monter et tourner a droite
+        console.log("NewX=>", newX, "\nNewY=>", newY, "\nGridX=>", gridX, "\nGridY=>", gridY); 
+        if (this.currentDirection === directions.right && (mapArray[gridY][gridX+1] === 1) ) {
+            if (posY < 0.4 && ((mapArray[gridY-1][gridX+1]) === 1) ) {
+                // console.log("Monte et tourne a droite");
+                return {
+                   newX: newX,
+                    newY:( gridY) * tileSize
+                }
+            }
+        }
 
-        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1 ) && ((mapboom[gridX, gridY] != 1) || (((mapboom[gridX, gridY] === 1 && (cemoment) - newseconede) < 2)))) {
-
+        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1) && ((mapboom[gridX, gridY] != 1) || (((mapboom[gridX, gridY] === 1 && (cemoment) - newseconede) < 2)))) {
             const topRightX = Math.floor((newX + tileSize - 1) / tileSize);
+            console.log("topRightX=>", topRightX);
+
             const bottomleftY = Math.floor((newY + tileSize - 1) / tileSize);
             const bottomRightX = Math.floor((newX + tileSize - 1) / tileSize);
             const bottomRightY = Math.floor((newY + tileSize - 1) / tileSize);
             return (
 
-                (mapArray[Math.floor(newY / tileSize)][topRightX] === 1) &&
+                (mapArray[Math.floor(newY/tileSize)][topRightX] === 1) &&
 
                 (mapArray[bottomleftY][gridX] === 1) &&
 
@@ -191,17 +210,17 @@ export class MapHero {
 
             mapArray[xbriks][ybriks] = 1
             console.log(xbriks, ybriks, "DDDDdddd");
-            
-           let brickBombed = document.querySelector(`.canBomb_${ybriks*32}_${xbriks*32}`)
-           brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
-                     
+
+            let brickBombed = document.querySelector(`.canBomb_${ybriks * 32}_${xbriks * 32}`)
+            brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
+
         }
     }
 
     boombandenemy(Xboomb, Yboomb) {
-        if (killenemy(Xboomb, enemyCoords[0], Yboomb, enemyCoords[1]) < 100) {
+        if (killenemy(Xboomb, enemyCoords[0], Yboomb, enemyCoords[1]) < 10000000) {
             // killTheEnemy = true
-        enemyCoords[3]=1
+            enemyCoords[3] = 1
         }
     }
 
@@ -209,7 +228,7 @@ export class MapHero {
 
         let herox = this.x / 32
         let heroy = this.y / 32
-        if (killHero(Xboomb, herox, Yboomb, heroy) ) {
+        if (killHero(Xboomb, herox, Yboomb, heroy)) {
 
             this.currentDirection = directions.destroy;
 
@@ -227,7 +246,7 @@ export class MapHero {
         if (killHero(enemyCoords[0], herocord[0], enemyCoords[1], herocord[1])) {
 
             this.currentDirection = directions.destroy;
-            
+
         }
 
 
@@ -242,8 +261,9 @@ export class MapHero {
             switch (direction) {
                 case directions.right:
                     newX = this.x + heroConfig.speed;
-                    this.currentDirection = directions.right;
+                    console.log("NewXHero=>", newX);
                     
+                    this.currentDirection = directions.right;
                     break;
                 case directions.left:
                     newX = this.x - heroConfig.speed;

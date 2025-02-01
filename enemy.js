@@ -1,5 +1,5 @@
 import { mapArray } from "./map.js";
-import { SetEnemyCoords, enemyCoords, heroConfig, killTheEnemy } from "./index.js";
+import { SetEnemyCoords, killTheEnemy } from "./index.js";
 
 
 class Enemy {
@@ -75,8 +75,8 @@ class Enemy {
 
         SetEnemyCoords(this.pixelX / 32, this.pixelY / 32)
 
-        if (enemyCoords[3] == 1) {
-            enemyCoords[3] = 0
+        if (killTheEnemy == true) {
+            killTheEnemy = false
             // Do the animation then remove it 
             this.element.remove()
         }
