@@ -42,7 +42,6 @@ class Enemy {
 
     getValidDirections() {
         const directions = [];
-
         // Check if valid dirxection*4
         if (this.isValidCARE(this.gridX, this.gridY - 1)) {
             directions.push('up');
@@ -127,6 +126,8 @@ class Enemy {
             // THE DISTENCE BETWEN TO POINT XA AND XB ITS JUST  THE DEFFERENCE BETWEN |XA - XB|  CHEK MY FILE RAPPELEMATHEMATIQUE.TXT TO LEARN MORE 
             const diffX = Math.abs(this.pixelX - NextPixelX);
             const diffY = Math.abs(this.pixelY - NextPixelY);
+            // console.log("diffXEnemy=>", diffX , "\ndiffYenemy=>", diffY);
+            
 
             if (diffX < this.moveSpeed && diffY < this.moveSpeed) {
                 // Snap to gr

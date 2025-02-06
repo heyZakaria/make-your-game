@@ -37,7 +37,7 @@ export const heroConfig = {
     tileSize: 32,
     initialGridX: 1,
     initialGridY: 1,
-    speed: 1
+    speed: 2
 };
 
 
@@ -59,7 +59,7 @@ level1.drawMap(mapArray)
 
 window.addEventListener('keydown', (e) => {
     if (e.code == "KeyP") {
-        const h = new EnemyGenerator(mapSence, 5)
+        const h = new EnemyGenerator(mapSence, 1)
         
         const hero = new MapHero(mapSence);
     }

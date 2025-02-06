@@ -1,11 +1,11 @@
 import { enemyCoords } from "./index.js";
 import { mapArray } from "./map.js";
-import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy } from "./index.js";
+import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy} from "./index.js";
 
 let mapSence = document.getElementById("map")
 
 var herocord = [2, 2]
-var boombcord = [0, 0]
+export var boombcord = [0, 0]
 
 let isboombed = false
 
@@ -14,22 +14,22 @@ let newseconede = 0
 let mapboom = []
 
 // This is Set NOT Get
-function setBombCoords(x, y) {
-    boombcord[0], x
-    boombcord[1], y
-}
+/*function setBombCoords(x, y) {
+    boombcord[0]= x
+    boombcord[1]= y
+}*/
 
 
-function killenemy(xa, xb, ya, yb) {
+export function killenemy(xa, xb, ya, yb) {
     return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb))
 
 }
 
 // This is Set NOT Get
-function setHeroCoords(x, y) {
+/*function setHeroCoords(x, y) {
     herocord[0] = x
     herocord[1] = y
-}
+}*/
 
 function killHero(xa, xb, ya, yb) {
     return (Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)) < 1)
@@ -39,31 +39,41 @@ function killHero(xa, xb, ya, yb) {
 export class MapHero {
 
     constructor() {
-        this.x = heroConfig.initialGridX * heroConfig.tileSize;
-        this.y = heroConfig.initialGridY * heroConfig.tileSize;
+        this.gridX = heroConfig.initialGridX;
+        this.gridY = heroConfig.initialGridY;
+        
+        this.pixelX = this.gridX * heroConfig.tileSize;
+        this.pixelY = this.gridY * heroConfig.tileSize;
+
+        this.nextGridX = this.gridX;
+        this.nextGridY = this.gridY;
+        
+        this.nextPixelX = this.nextGridX * heroConfig.tileSize;
+        this.nextPixelY = this.nextGridY * heroConfig.tileSize;
+
+        this.isMoving = false;
+      
 
         this.heroImgages = {
             [directions.up]: new Image(),
             [directions.down]: new Image(),
             [directions.left]: new Image(),
             [directions.right]: new Image(),
-            [directions.destroy]: new Image()
+            [directions.destroy]: new Image(),
         };
 
         this.heroImgages[directions.up].src = './assets/move_up.png';
         this.heroImgages[directions.down].src = './assets/move_down.png';
         this.heroImgages[directions.left].src = './assets/move_left.png';
         this.heroImgages[directions.right].src = './assets/move_right.png';
-        this.heroImgages[directions.destroy].src = './assets/destroy_hero.png'
-
+        this.heroImgages[directions.destroy].src = './assets/destroy_hero.png';
 
         this.heroWidth = 32;
         this.heroHeight = 32;
-
         this.currentDirection = directions.down;
         this.frameIndex = 0;
         this.stepCount = 0;
-        this.stepsPerFrame = 10;
+        this.stepsPerFrame = 5;
 
         this.element = document.createElement('div');
         this.element.style.width = `${heroConfig.tileSize}px`;
@@ -72,17 +82,20 @@ export class MapHero {
         this.element.style.overflow = "hidden";
 
         mapSence.appendChild(this.element);
-
+        
         this.pressedDirections = [];
-
         this.initializeControls();
         this.startGameLoop();
     }
+
     initializeControls() {
+       
         document.addEventListener("keydown", (e) => {
             const dir = keys[e.key];
-            if (dir && this.pressedDirections.indexOf(dir) === -1) {
+            const index = this.pressedDirections.indexOf(dir);
+            if (dir && index === -1) {
                 this.pressedDirections.unshift(dir);
+                this.tryToMove();
             }
         });
 
@@ -95,51 +108,88 @@ export class MapHero {
         });
     }
 
-    canMove(newX, newY) {
-        const tileSize = heroConfig.tileSize;
-        const gridX = Math.floor(newX / tileSize);
-        const gridY = Math.floor(newY / tileSize);
+    canMove(nextGridX, nextGridY) {
+        if (!mapArray[nextGridY] || !mapArray[nextGridY][nextGridX] || mapArray[nextGridY][nextGridX] !== 1) {
+            console.log("OUT OF MAP", mapArray[nextGridY][nextGridX]);
+            return false;
+        }else {
+            return mapArray[nextGridY][nextGridX] === 1
+        }
+    }
 
-        let cemoment = new Date().getSeconds()
-        let posX = (newX%tileSize)/tileSize
-        let posY = (newY%tileSize)/tileSize
-        console.log("POSX=>", posX,"\nPOSY=>", posY);
+    tryToMove() {
+        if (this.isMoving) 
+            return;
+        const direction = this.pressedDirections[0];
+        console.log("DIR=>", direction);
         
-        //On essaye de diviser le bomberman en 4 carrees et on calcul 
-        //si les parties du bomberman sont colles au mur sinon il va bouger, pas de collision
+        if (!direction) 
+            return;
+
+        switch (direction) {
+            case directions.right:
+                this.nextGridX++;
+                break;
+            case directions.left:
+                this.nextGridX--;
+                break;
+            case directions.down:
+                this.nextGridY++;
+                break;
+            case directions.up:
+                this.nextGridY--;
+                break;
+        }
+        if (this.canMove(this.nextGridX, this.nextGridY)) {
+            this.currentDirection = direction;
+            this.isMoving = true;
+            console.log("MOVE", this.isMoving);
+            
+            this.nextPixelX = this.nextGridX * heroConfig.tileSize;
+            this.nextPixelY = this.nextGridY * heroConfig.tileSize;
+
+            console.log("NPXCanmove=>", this.nextPixelX , "\nNPYCanmove=>", this.nextPixelY);
+        }
+        console.log("CAN MOVE", this.canMove(this.nextGridX, this.nextGridY));
+    }
+
+    moveHero() {
+        if (!this.isMoving) 
+            return;
+      
+        console.log("NPX=>", this.nextPixelX , "\nNPY=>", this.nextPixelY);
         
-        //Monter et tourner a droite
-        console.log("NewX=>", newX, "\nNewY=>", newY, "\nGridX=>", gridX, "\nGridY=>", gridY); 
-        if (this.currentDirection === directions.right && (mapArray[gridY][gridX+1] === 1) ) {
-            if (posY < 0.4 && ((mapArray[gridY-1][gridX+1]) === 1) ) {
-                // console.log("Monte et tourne a droite");
-                return {
-                   newX: newX,
-                    newY:( gridY) * tileSize
-                }
-            }
+        const diffX = Math.abs(this.pixelX - this.nextPixelX);
+        const diffY = Math.abs(this.pixelY - this.nextPixelY);
+        console.log("diffX=>", diffX , "\ndiffY=>", diffY);
+        
+        
+        if (this.pixelX < this.nextPixelX)
+        {
+            this.pixelX += heroConfig.speed;
+            console.log("this.pixelX=>", this.pixelX);
+        }
+        if (this.pixelX > this.nextPixelX) 
+            this.pixelX -= heroConfig.speed;
+        if (this.pixelY < this.nextPixelY) 
+            this.pixelY += heroConfig.speed;
+        if (this.pixelY > this.nextPixelY) 
+            this.pixelY -= heroConfig.speed;
+
+        this.stepCount++;
+        if (this.stepCount > this.stepsPerFrame) {
+            this.stepCount = 0;
+            this.frameIndex = (this.frameIndex + 1) % 3;
         }
 
-        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1) && ((mapboom[gridX, gridY] != 1) || (((mapboom[gridX, gridY] === 1 && (cemoment) - newseconede) < 2)))) {
-            const topRightX = Math.floor((newX + tileSize - 1) / tileSize);
-            console.log("topRightX=>", topRightX);
-
-            const bottomleftY = Math.floor((newY + tileSize - 1) / tileSize);
-            const bottomRightX = Math.floor((newX + tileSize - 1) / tileSize);
-            const bottomRightY = Math.floor((newY + tileSize - 1) / tileSize);
-            return (
-
-                (mapArray[Math.floor(newY/tileSize)][topRightX] === 1) &&
-
-                (mapArray[bottomleftY][gridX] === 1) &&
-
-                (mapArray[bottomRightY][bottomRightX] === 1)
-
-
-            );
+        if (diffX < heroConfig.speed && diffY < heroConfig.speed) {
+            this.pixelX = this.nextPixelX;
+            this.pixelY = this.nextPixelY;
+            this.gridX = Math.floor(this.pixelX / heroConfig.tileSize);
+            this.gridY = Math.floor(this.pixelY / heroConfig.tileSize);
+            this.isMoving = false;
+            this.tryToMove();
         }
-
-        return false;
     }
 
     createBomb() {
@@ -147,7 +197,9 @@ export class MapHero {
 
         let Xboomb = Math.floor(this.x);
         let Yboomb = Math.floor(this.y);
-        setBombCoords(this.x / 32, this.y / 32)
+        //setBombCoords(this.x / 32, this.y / 32)
+        //console.log(setBombCoords(Xboomb, Yboomb));
+        
         mapboom[(Math.floor((Xboomb) / 32), Math.floor((Yboomb) / 32))] = 1
         newseconede = new Date().getSeconds()
 
@@ -210,117 +262,46 @@ export class MapHero {
 
             mapArray[xbriks][ybriks] = 1
             console.log(xbriks, ybriks, "DDDDdddd");
-
-            let brickBombed = document.querySelector(`.canBomb_${ybriks * 32}_${xbriks * 32}`)
-            brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
-
+            
+           let brickBombed = document.querySelector(`.canBomb_${ybriks*32}_${xbriks*32}`)
+           brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
+                     
         }
     }
 
     boombandenemy(Xboomb, Yboomb) {
-        if (killenemy(Xboomb, enemyCoords[0], Yboomb, enemyCoords[1]) < 10000000) {
-            // killTheEnemy = true
-            enemyCoords[3] = 1
+        let xenemy = this.x / 32
+        let yenemy = this.y / 32
+        if (killenemy(Xboomb, xenemy, Yboomb, yenemy) < 100) {
+            this.currentDirection = directions.destroyEnemy;
+            console.log("ENEMY KILLED");    
         }
     }
 
     boombandhero(Xboomb, Yboomb) {
-
         let herox = this.x / 32
         let heroy = this.y / 32
-        if (killHero(Xboomb, herox, Yboomb, heroy)) {
-
+        if (killHero(Xboomb, herox, Yboomb, heroy) ) {
             this.currentDirection = directions.destroy;
-
         }
-
     }
 
-
-    moveHero() {
-        const direction = this.pressedDirections[0];
-        let newX = this.x;
-        let newY = this.y;
-
-        setHeroCoords(this.x / 32, this.y / 32)
-        if (killHero(enemyCoords[0], herocord[0], enemyCoords[1], herocord[1])) {
-
-            this.currentDirection = directions.destroy;
-
-        }
-
-
-        if (direction) {
-
-            this.stepCount++;
-            if (this.stepCount > this.stepsPerFrame) {
-                this.stepCount = 0;
-                this.frameIndex = (this.frameIndex + 1) % 3;
-            }
-
-            switch (direction) {
-                case directions.right:
-                    newX = this.x + heroConfig.speed;
-                    console.log("NewXHero=>", newX);
-                    
-                    this.currentDirection = directions.right;
-                    break;
-                case directions.left:
-                    newX = this.x - heroConfig.speed;
-                    this.currentDirection = directions.left;
-                    break;
-                case directions.down:
-                    newY = this.y + heroConfig.speed;
-                    this.currentDirection = directions.down;
-                    break;
-                case directions.up:
-                    newY = this.y - heroConfig.speed;
-                    this.currentDirection = directions.up;
-                    break;
-                case direction.destroy:
-                    this.currentDirection = directions.destroy;
-                    break;
-
-            }
-
-            if (this.canMove(newX, newY)) {
-                this.x = newX;
-                this.y = newY;
-
-                // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-                document.addEventListener("keydown", (e) => {
-
-                    if (e.key == "x") {
-                        this.createBomb(this.x, this.y)
-
-                    }
-                })
-
-            }
-        } else {
-            this.frameIndex = 0;
-            this.stepCount = 0;
-        }
-
-        this.render();
-    }
 
     render() {
-        const curHeroDirection = this.heroImgages[this.currentDirection];
+        if (killHero(enemyCoords[0], this.gridX, enemyCoords[1], this.gridY)) {
+            this.currentDirection = directions.destroy;
+        }
 
+        const curHeroDirection = this.heroImgages[this.currentDirection];
         this.element.style.backgroundImage = `url(${curHeroDirection.src})`;
         this.element.style.backgroundPosition = `-${this.frameIndex * this.heroWidth}px 0px`;
-        // AAAAAAAAAAAAAAAAAAAAAAAAAAA
-        this.element.style.transform = `translate3d(${this.x}px ,${this.y}px,  2px)`
-
-        /* this.element.style.left = `${this.x}px`;
-        this.element.style.top = `${this.y}px`; */
+        this.element.style.transform = `translate3d(${this.pixelX}px, ${this.pixelY}px, 2px)`;
     }
 
     startGameLoop() {
         const gameLoop = () => {
             this.moveHero();
-
+            this.render();
             window.requestAnimationFrame(gameLoop);
         };
         gameLoop();
