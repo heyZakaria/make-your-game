@@ -1,0 +1,20 @@
+#game {
+    display: flex;
+    justify-content: center;
+
+}
+
+#gameBar {
+    height: 50px;
+    width: inherit;
+    background-color: silver;
+}
+
+div {
+   
+    
+
+    object-fit: contain;
+
+}
+
