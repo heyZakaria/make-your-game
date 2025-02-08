@@ -44,9 +44,6 @@ export class MapHero {
         
         this.pixelX = this.gridX * heroConfig.tileSize;
         this.pixelY = this.gridY * heroConfig.tileSize;
-
-        this.nextGridX = this.gridX;
-        this.nextGridY = this.gridY;
         
         this.nextPixelX = this.nextGridX * heroConfig.tileSize;
         this.nextPixelY = this.nextGridY * heroConfig.tileSize;
@@ -109,7 +106,7 @@ export class MapHero {
     }
 
     canMove(nextGridX, nextGridY) {
-        if (!mapArray[nextGridY] || !mapArray[nextGridY][nextGridX] || mapArray[nextGridY][nextGridX] !== 1) {
+        if (mapArray[nextGridY][nextGridX] !== 1) {
             console.log("OUT OF MAP", mapArray[nextGridY][nextGridX]);
             return false;
         }else {
@@ -122,35 +119,38 @@ export class MapHero {
             return;
         const direction = this.pressedDirections[0];
         console.log("DIR=>", direction);
+
+        let nextGridX = this.gridX;
+        let nextGridY = this.gridY;
         
         if (!direction) 
             return;
 
         switch (direction) {
             case directions.right:
-                this.nextGridX++;
+                nextGridX++;
                 break;
             case directions.left:
-                this.nextGridX--;
+                nextGridX--;
                 break;
             case directions.down:
-                this.nextGridY++;
+                nextGridY++;
                 break;
             case directions.up:
-                this.nextGridY--;
+                nextGridY--;
                 break;
         }
-        if (this.canMove(this.nextGridX, this.nextGridY)) {
+        if (this.canMove(nextGridX, nextGridY)) {
             this.currentDirection = direction;
             this.isMoving = true;
             console.log("MOVE", this.isMoving);
             
-            this.nextPixelX = this.nextGridX * heroConfig.tileSize;
-            this.nextPixelY = this.nextGridY * heroConfig.tileSize;
+            this.nextPixelX = nextGridX * heroConfig.tileSize;
+            this.nextPixelY = nextGridY * heroConfig.tileSize;
 
             console.log("NPXCanmove=>", this.nextPixelX , "\nNPYCanmove=>", this.nextPixelY);
         }
-        console.log("CAN MOVE", this.canMove(this.nextGridX, this.nextGridY));
+        console.log("CAN MOVE", this.canMove(nextGridX, nextGridY));
     }
 
     moveHero() {
