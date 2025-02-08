@@ -1,6 +1,6 @@
 import { enemyCoords } from "./index.js";
 import { mapArray } from "./map.js";
-import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy} from "./index.js";
+import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy } from "./index.js";
 
 let mapSence = document.getElementById("map")
 
@@ -13,11 +13,11 @@ let newseconede = 0
 
 let mapboom = []
 
-// This is Set NOT Get
-/*function setBombCoords(x, y) {
-    boombcord[0]= x
-    boombcord[1]= y
-}*/
+// // This is Set NOT Get
+// function setBombCoords(x, y) {
+//     boombcord[0]= x
+//     boombcord[1]= y
+// }
 
 
 export function killenemy(xa, xb, ya, yb) {
@@ -41,15 +41,15 @@ export class MapHero {
     constructor() {
         this.gridX = heroConfig.initialGridX;
         this.gridY = heroConfig.initialGridY;
-        
+
         this.pixelX = this.gridX * heroConfig.tileSize;
         this.pixelY = this.gridY * heroConfig.tileSize;
-        
+
         this.nextPixelX = this.gridX * heroConfig.tileSize;
         this.nextPixelY = this.gridY * heroConfig.tileSize;
 
         this.isMoving = false;
-      
+
 
         this.heroImgages = {
             [directions.up]: new Image(),
@@ -79,20 +79,24 @@ export class MapHero {
         this.element.style.overflow = "hidden";
 
         mapSence.appendChild(this.element);
-        
+
         this.pressedDirections = [];
         this.initializeControls();
         this.startGameLoop();
     }
 
     initializeControls() {
-       
+
         document.addEventListener("keydown", (e) => {
             const dir = keys[e.key];
             const index = this.pressedDirections.indexOf(dir);
             if (dir && index === -1) {
                 this.pressedDirections.unshift(dir);
                 this.tryToMove();
+            }
+
+            if (e.key === "x") {
+                this.createBomb(this.pixelX, this.pixelY)
             }
         });
 
@@ -109,21 +113,21 @@ export class MapHero {
         if (mapArray[nextGridY][nextGridX] !== 1) {
             console.log("OUT OF MAP", mapArray[nextGridY][nextGridX]);
             return false;
-        }else {
+        } else {
             return mapArray[nextGridY][nextGridX] === 1
         }
     }
 
     tryToMove() {
-        if (this.isMoving) 
+        if (this.isMoving)
             return;
         const direction = this.pressedDirections[0];
         console.log("DIR=>", direction);
 
         let nextGridX = this.gridX;
         let nextGridY = this.gridY;
-        
-        if (!direction) 
+
+        if (!direction)
             return;
 
         switch (direction) {
@@ -144,36 +148,35 @@ export class MapHero {
             this.currentDirection = direction;
             this.isMoving = true;
             console.log("MOVE", this.isMoving);
-            
+
             this.nextPixelX = nextGridX * heroConfig.tileSize;
             this.nextPixelY = nextGridY * heroConfig.tileSize;
 
-            console.log("NPXCanmove=>", this.nextPixelX , "\nNPYCanmove=>", this.nextPixelY);
+            console.log("NPXCanmove=>", this.nextPixelX, "\nNPYCanmove=>", this.nextPixelY);
         }
         console.log("CAN MOVE", this.canMove(nextGridX, nextGridY));
     }
 
     moveHero() {
-        if (!this.isMoving) 
+        if (!this.isMoving)
             return;
-      
-        console.log("NPX=>", this.nextPixelX , "\nNPY=>", this.nextPixelY);
-        
+
+        console.log("NPX=>", this.nextPixelX, "\nNPY=>", this.nextPixelY);
+
         const diffX = Math.abs(this.pixelX - this.nextPixelX);
         const diffY = Math.abs(this.pixelY - this.nextPixelY);
-        console.log("diffX=>", diffX , "\ndiffY=>", diffY);
-        
-        
-        if (this.pixelX < this.nextPixelX)
-        {
+        console.log("diffX=>", diffX, "\ndiffY=>", diffY);
+
+
+        if (this.pixelX < this.nextPixelX) {
             this.pixelX += heroConfig.speed;
             console.log("this.pixelX=>", this.pixelX);
         }
-        if (this.pixelX > this.nextPixelX) 
+        if (this.pixelX > this.nextPixelX)
             this.pixelX -= heroConfig.speed;
-        if (this.pixelY < this.nextPixelY) 
+        if (this.pixelY < this.nextPixelY)
             this.pixelY += heroConfig.speed;
-        if (this.pixelY > this.nextPixelY) 
+        if (this.pixelY > this.nextPixelY)
             this.pixelY -= heroConfig.speed;
 
         this.stepCount++;
@@ -192,15 +195,18 @@ export class MapHero {
         }
     }
 
-    createBomb() {
+    createBomb(x, y) {
+
         isboombed = true
 
-        let Xboomb = Math.floor(this.x);
-        let Yboomb = Math.floor(this.y);
-        //setBombCoords(this.x / 32, this.y / 32)
-        //console.log(setBombCoords(Xboomb, Yboomb));
-        
-        mapboom[(Math.floor((Xboomb) / 32), Math.floor((Yboomb) / 32))] = 1
+        let Xboomb = Math.floor(x);
+        console.log("XBOMB=>", Xboomb);
+
+        let Yboomb = Math.floor(y);
+        // setBombCoords(this.x / 32, this.y / 32)
+        // console.log(setBombCoords(Xboomb, Yboomb));
+
+        // mapboom[(Math.floor((Xboomb) / 32), Math.floor((Yboomb) / 32))] = 1
         newseconede = new Date().getSeconds()
 
         let boomb = document.createElement('div');
@@ -215,6 +221,8 @@ export class MapHero {
 
         setTimeout(() => {
             this.boombandbriks(Math.ceil(Xboomb / 32), Math.ceil(Yboomb / 32))
+            console.log("BOMB&BRICK=>", this.boombandbriks);
+
             this.boombandenemy(Xboomb / 32, Yboomb / 32)
             this.boombandhero((Xboomb) / 32, Yboomb / 32)
             mapboom[(Math.floor((Xboomb) / 32), Math.floor((Yboomb) / 32))] = 0
@@ -233,39 +241,31 @@ export class MapHero {
             xbriks = Yboomb + 1
             ybriks = Xboomb
             letsboomb = true
-
         }
         if (mapArray[Yboomb][Xboomb + 1] === 2) {
-
             xbriks = Yboomb
             ybriks = Xboomb + 1
             letsboomb = true
-
-
         }
         if (mapArray[Yboomb - 1][Xboomb] === 2) {
-
             xbriks = Yboomb - 1
             ybriks = Xboomb
-
             letsboomb = true
-
         }
         if (mapArray[Yboomb][Xboomb - 1] === 2) {
-
             xbriks = Yboomb
             ybriks = Xboomb - 1
+            console.log("XBR:", xbriks);
+            console.log("YBR:", ybriks);
+            
             letsboomb = true
-
         }
         if (letsboomb) {
-
             mapArray[xbriks][ybriks] = 1
-            console.log(xbriks, ybriks, "DDDDdddd");
-            
-           let brickBombed = document.querySelector(`.canBomb_${ybriks*32}_${xbriks*32}`)
-           brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
-                     
+            console.log("MAP", mapArray[ybriks][xbriks]);
+
+            let brickBombed = document.querySelector(`.canBomb_${ybriks * 32}_${xbriks * 32}`)
+            brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
         }
     }
 
@@ -274,14 +274,14 @@ export class MapHero {
         let yenemy = this.y / 32
         if (killenemy(Xboomb, xenemy, Yboomb, yenemy) < 100) {
             this.currentDirection = directions.destroyEnemy;
-            console.log("ENEMY KILLED");    
+            console.log("ENEMY KILLED");
         }
     }
 
     boombandhero(Xboomb, Yboomb) {
         let herox = this.x / 32
         let heroy = this.y / 32
-        if (killHero(Xboomb, herox, Yboomb, heroy) ) {
+        if (killHero(Xboomb, herox, Yboomb, heroy)) {
             this.currentDirection = directions.destroy;
         }
     }
