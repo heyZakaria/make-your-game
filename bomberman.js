@@ -45,8 +45,8 @@ export class MapHero {
         this.pixelX = this.gridX * heroConfig.tileSize;
         this.pixelY = this.gridY * heroConfig.tileSize;
         
-        this.nextPixelX = this.nextGridX * heroConfig.tileSize;
-        this.nextPixelY = this.nextGridY * heroConfig.tileSize;
+        this.nextPixelX = this.gridX * heroConfig.tileSize;
+        this.nextPixelY = this.gridY * heroConfig.tileSize;
 
         this.isMoving = false;
       
