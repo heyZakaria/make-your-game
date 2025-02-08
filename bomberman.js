@@ -1,6 +1,6 @@
 import { enemyCoords } from "./index.js";
 import { mapArray } from "./map.js";
-import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy} from "./index.js";
+import { directions, keys, heroConfig, greenBlockImage, boombimage, killTheEnemy } from "./index.js";
 
 let mapSence = document.getElementById("map")
 
@@ -102,7 +102,7 @@ export class MapHero {
 
         let cemoment = new Date().getSeconds()
 
-        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1 ) && ((mapboom[gridX, gridY] != 1) || (((mapboom[gridX, gridY] === 1 && (cemoment) - newseconede) < 2)))) {
+        if (mapArray[gridY] && ((mapArray[gridY][gridX]) === 1) && ((mapboom[gridX, gridY] != 1) || (((mapboom[gridX, gridY] === 1 && (cemoment) - newseconede) < 2)))) {
 
             const topRightX = Math.floor((newX + tileSize - 1) / tileSize);
             const bottomleftY = Math.floor((newY + tileSize - 1) / tileSize);
@@ -191,10 +191,10 @@ export class MapHero {
 
             mapArray[xbriks][ybriks] = 1
             console.log(xbriks, ybriks, "DDDDdddd");
-            
-           let brickBombed = document.querySelector(`.canBomb_${ybriks*32}_${xbriks*32}`)
-           brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
-                     
+
+            let brickBombed = document.querySelector(`.canBomb_${ybriks * 32}_${xbriks * 32}`)
+            brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
+
         }
     }
 
@@ -208,7 +208,7 @@ export class MapHero {
 
         let herox = this.x / 32
         let heroy = this.y / 32
-        if (killHero(Xboomb, herox, Yboomb, heroy) ) {
+        if (killHero(Xboomb, herox, Yboomb, heroy)) {
 
             this.currentDirection = directions.destroy;
 
@@ -226,7 +226,7 @@ export class MapHero {
         if (killHero(enemyCoords[0], herocord[0], enemyCoords[1], herocord[1])) {
 
             this.currentDirection = directions.destroy;
-            
+
         }
 
 
@@ -240,21 +240,53 @@ export class MapHero {
 
             switch (direction) {
                 case directions.right:
-                    newX = this.x + heroConfig.speed;
-                    this.currentDirection = directions.right;
-                    
+                   
+                         newX = this.x + heroConfig.speed;
+                        this.currentDirection = directions.right;
+                        //  console.log(this.x, this.y, heroConfig.speed, "RIGHT");
+                        console.log(this.x, this.x % 32, "Lba9i");
+
+                   
+
+
+
                     break;
                 case directions.left:
                     newX = this.x - heroConfig.speed;
                     this.currentDirection = directions.left;
+                    console.log(this.x, this.y, this.x % 32, "Lba9i LEFT");
+
                     break;
                 case directions.down:
+ 
+                if ( (this.x % 32) < 25 && (this.x % 32) > 15 ) {
+                    console.log(this.x % 32);
+                    
+                    newX -=   (this.x % 32) 
+                    
+                    this.currentDirection = directions.right;
+                    console.log(this.x, this.y, heroConfig.speed, "Finqqqqqqqql ", newX);
+                    
+                } else if (  (this.x % 32) > 10) {
+                    console.log(this.x % 32);
+                    
+                    newX +=  32- (this.x % 32) 
+                    
+                    this.currentDirection = directions.right;
+                    console.log(this.x, this.y, heroConfig.speed, "Finqqqqqqqql ", newX);
+                    
+                } 
                     newY = this.y + heroConfig.speed;
                     this.currentDirection = directions.down;
+                    console.log(this.x, this.y, heroConfig.speed, "DOWN");
+
                     break;
                 case directions.up:
+
+                
                     newY = this.y - heroConfig.speed;
                     this.currentDirection = directions.up;
+                    console.log(this.y, heroConfig.speed, "UP");
                     break;
                 case direction.destroy:
                     this.currentDirection = directions.destroy;
@@ -295,10 +327,19 @@ export class MapHero {
         /* this.element.style.left = `${this.x}px`;
         this.element.style.top = `${this.y}px`; */
     }
-
     startGameLoop() {
+        let i = 0
+        let count = 200
+        let Time = document.getElementById("Time")
+        Time.innerText = "Time" + " " + count
         const gameLoop = () => {
             this.moveHero();
+            i += 16.7
+            if (i >= 1000) {
+                count--
+                Time.innerText = "Time" + " " + count
+                i = 0
+            }
 
             window.requestAnimationFrame(gameLoop);
         };

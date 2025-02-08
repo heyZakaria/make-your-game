@@ -38,7 +38,7 @@ export const heroConfig = {
     tileSize: 32,
     initialGridX: 1,
     initialGridY: 1,
-    speed: 2
+    speed: 1
 };
 
 export let enemyCoords = [-1, -1]

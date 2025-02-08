@@ -2,7 +2,7 @@
     margin: 0;
 }
 
-h1{
+h1 {
     color: white;
 }
 
@@ -19,8 +19,31 @@ h1{
     height: 50px;
     width: inherit;
     background-color: silver;
+    display: grid;
+    grid-template-columns: [row1-start] 33.33% [row1-end] 33.33% [third-line] auto [last-line];
+
 }
 
+#Time,
+#Score,
+#Rwaa7 {
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    font-weight: bold;
+}
+
+#Time {
+    background-color: aqua;
+}
+
+#Score {
+    background-color: aquamarine;
+}
+
+#Rwaa7 {
+    background-color: blanchedalmond;
+}
 
 img {
     height: inherit;
@@ -32,7 +55,7 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: black;
+    background-color: aquamarine;
     width: 100%;
     height: 100%;
     opacity: .6;
@@ -52,5 +75,6 @@ img {
     width: 60%;
     height: 40%;
     z-index: 3;
+    padding: 2%;
 
 }
