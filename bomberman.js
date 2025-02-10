@@ -220,12 +220,13 @@ export class MapHero {
         mapSence.appendChild(boomb);
 
         setTimeout(() => {
-            this.boombandbriks(Math.ceil(Xboomb / 32), Math.ceil(Yboomb / 32))
+            this.createExplosion(Math.ceil(Xboomb / heroConfig.tileSize), Math.ceil(Yboomb / heroConfig.tileSize))
+            this.boombandbriks(Math.ceil(Xboomb / heroConfig.tileSize), Math.ceil(Yboomb / heroConfig.tileSize))
             console.log("BOMB&BRICK=>", this.boombandbriks);
 
-            this.boombandenemy(Xboomb / 32, Yboomb / 32)
-            this.boombandhero((Xboomb) / 32, Yboomb / 32)
-            mapboom[(Math.floor((Xboomb) / 32), Math.floor((Yboomb) / 32))] = 0
+            this.boombandenemy(Xboomb / heroConfig.tileSize, Yboomb / heroConfig.tileSize)
+            this.boombandhero((Xboomb) / heroConfig.tileSize, Yboomb / heroConfig.tileSize)
+            mapboom[(Math.floor((Xboomb) / heroConfig.tileSize), Math.floor((Yboomb) / heroConfig.tileSize))] = 0
             boomb.remove();
         }, 3000);
 
@@ -257,7 +258,7 @@ export class MapHero {
             ybriks = Xboomb - 1
             console.log("XBR:", xbriks);
             console.log("YBR:", ybriks);
-            
+
             letsboomb = true
         }
         if (letsboomb) {
@@ -286,12 +287,43 @@ export class MapHero {
         }
     }
 
+    // PArtie de lexplosion
+    createExplosion(gridX, gridY) {
+        const directions = [
+            { dx: 0, dy: 1 },  
+            { dx: 0, dy: -1 }, 
+            { dx: 1, dy: 0 }, 
+            { dx: -1, dy: 0 } 
+        ];
 
+        this.createImgExplosion(gridX, gridY);
+
+        directions.forEach(dir => {
+            const newX = gridX + dir.dx;
+            const newY = gridY + dir.dy;
+
+            if (mapArray[newY] && mapArray[newY][newX]) {
+                this.createImgExplosion(newX, newY);
+            }
+        });
+    }
+
+    createImgExplosion(gridX, gridY) {
+        const explo = document.createElement('div')
+        explo.style.width = `${heroConfig.tileSize}px`
+        explo.style.height = `${heroConfig.tileSize}px`
+        explo.style.position = "absolute"
+        explo.style.backgroundColor = "rgb(255, 72, 0)"
+        explo.style.transform = `translate3d(${gridX * heroConfig.tileSize}px, ${gridY * heroConfig.tileSize}px, 0px)`;
+        mapSence.appendChild(explo);
+        setTimeout(() => {
+            explo.remove();
+        }, 200);
+    }
     render() {
         if (killHero(enemyCoords[0], this.gridX, enemyCoords[1], this.gridY)) {
             this.currentDirection = directions.destroy;
         }
-
         const curHeroDirection = this.heroImgages[this.currentDirection];
         this.element.style.backgroundImage = `url(${curHeroDirection.src})`;
         this.element.style.backgroundPosition = `-${this.frameIndex * this.heroWidth}px 0px`;
