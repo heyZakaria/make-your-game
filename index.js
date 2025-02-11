@@ -24,6 +24,7 @@ export const directions = {
     down: "ArrowDown",
     left: "ArrowLeft",
     right: "ArrowRight",
+    destroy:"destroy",
 };
 
 export const keys = {
@@ -42,7 +43,7 @@ export const heroConfig = {
 
 
 
-export let enemyCoords = [-1, -1,0]
+export let enemyCoords = [-1, -1,0,0]
 export let killTheEnemy = false
 
 export function SetEnemyCoords(x, y) {
@@ -59,7 +60,7 @@ level1.drawMap(mapArray)
 
 window.addEventListener('keydown', (e) => {
     if (e.code == "KeyP") {
-        const h = new EnemyGenerator(mapSence, 5)
+        const h = new EnemyGenerator(mapSence, 4)
         
         const hero = new MapHero(mapSence);
     }
