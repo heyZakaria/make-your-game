@@ -111,7 +111,7 @@ export class MapHero {
 
     canMove(nextGridX, nextGridY) {
         if (mapArray[nextGridY][nextGridX] !== 1) {
-            console.log("OUT OF MAP", mapArray[nextGridY][nextGridX]);
+            // console.log("OUT OF MAP", mapArray[nextGridY][nextGridX]);
             return false;
         } else {
             return mapArray[nextGridY][nextGridX] === 1
@@ -222,10 +222,10 @@ export class MapHero {
         setTimeout(() => {
             this.createExplosion(Math.ceil(Xboomb / heroConfig.tileSize), Math.ceil(Yboomb / heroConfig.tileSize))
             this.boombandbriks(Math.ceil(Xboomb / heroConfig.tileSize), Math.ceil(Yboomb / heroConfig.tileSize))
-            console.log("BOMB&BRICK=>", this.boombandbriks);
+            // console.log("BOMB&BRICK=>", this.boombandbriks);
 
             this.boombandenemy(Xboomb / heroConfig.tileSize, Yboomb / heroConfig.tileSize)
-            this.boombandhero((Xboomb) / heroConfig.tileSize, Yboomb / heroConfig.tileSize)
+            this.boombandhero(Xboomb / heroConfig.tileSize, Yboomb / heroConfig.tileSize)
             mapboom[(Math.floor((Xboomb) / heroConfig.tileSize), Math.floor((Yboomb) / heroConfig.tileSize))] = 0
             boomb.remove();
         }, 3000);
@@ -263,7 +263,7 @@ export class MapHero {
         }
         if (letsboomb) {
             mapArray[xbriks][ybriks] = 1
-            console.log("MAP", mapArray[ybriks][xbriks]);
+            // console.log("MAP", mapArray[ybriks][xbriks]);
 
             let brickBombed = document.querySelector(`.canBomb_${ybriks * 32}_${xbriks * 32}`)
             brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
@@ -280,9 +280,21 @@ export class MapHero {
     }
 
     boombandhero(Xboomb, Yboomb) {
-        let herox = this.x / 32
-        let heroy = this.y / 32
-        if (killHero(Xboomb, herox, Yboomb, heroy)) {
+        let herox = this.gridX
+        let heroy = this.gridY
+        console.log("HEROX=>", herox);
+        console.log("XBOOOMB=>", Xboomb);
+        console.log("HEROY=>", heroy);
+        console.log("YBOOOMB=>", Yboomb);
+
+
+
+        if ((Math.abs(Xboomb - herox) < 2) && (Math.abs(Xboomb - herox) !== 0)) {
+            console.log("HerooX destroooooooooooy");
+
+            this.currentDirection = directions.destroy;
+        } else if ((Math.abs(Yboomb - heroy) < 2) && (Math.abs(Yboomb - heroy) !== 0)) {
+            console.log("HerooY destroooooooooooy");
             this.currentDirection = directions.destroy;
         }
     }
@@ -290,10 +302,10 @@ export class MapHero {
     // PArtie de lexplosion
     createExplosion(gridX, gridY) {
         const directions = [
-            { dx: 0, dy: 1 },  
-            { dx: 0, dy: -1 }, 
-            { dx: 1, dy: 0 }, 
-            { dx: -1, dy: 0 } 
+            { dx: 0, dy: 1 },
+            { dx: 0, dy: -1 },
+            { dx: 1, dy: 0 },
+            { dx: -1, dy: 0 }
         ];
 
         this.createImgExplosion(gridX, gridY);
@@ -321,9 +333,6 @@ export class MapHero {
         }, 200);
     }
     render() {
-        if (killHero(enemyCoords[0], this.gridX, enemyCoords[1], this.gridY)) {
-            this.currentDirection = directions.destroy;
-        }
         const curHeroDirection = this.heroImgages[this.currentDirection];
         this.element.style.backgroundImage = `url(${curHeroDirection.src})`;
         this.element.style.backgroundPosition = `-${this.frameIndex * this.heroWidth}px 0px`;
