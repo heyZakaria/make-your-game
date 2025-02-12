@@ -4,35 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
     <title>Make-Your-Game</title>
-    <style>
-         #line {
-           height: 2px;
-            position: absolute;
-        }
-        #map {
-            background-color: aqua;
-            position: absolute;
-        }
 
-        body {
-            display: flex;
-            position: relative;
-
-        }
-    </style>
 </head>
 
 <body>
+    <div id="game">
 
-    <div id="map">
-        
+        <div id="settingScreen">
+        </div>
+        <div id="gameSetting">
+            <h1 id="title"> Welcome Hero Let's Bomb it </h1><br>
+            <h1 id="instructions">- Use Arrows to Move & SPACE to Bomb<br>- Press P to START</h1>
+        </div>
+        <div id="map">
+            <div id="gameBar">
+                <div id="Time">Time</div>
+                <div id="Score">Score</div>
+                <div id="Rwaa7">Rwaa7</div>
+            </div>
+        </div>
+
     </div>
 
+    <script type="module" src="./index.js"></script>
 
-    <script type="module" src="./index.js" ></script>
-</script>
 
 </body>
 
-</html> 
+</html>

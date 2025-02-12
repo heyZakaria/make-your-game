@@ -1,13 +1,13 @@
 import { mapArray } from "./map.js";
-import { SetEnemyCoords, killTheEnemy ,enemyCoords} from "./index.js";
-import { mapboom } from "./bomberman.js";
+import { SetEnemyCoords, killTheEnemy, enemyCoords } from "./index.js";
+import { bombCoords } from "./bomberman.js";
 
 class Enemy {
-    constructor(x, y,z) {
+    constructor(x, y, z) {
         //setup grid then >>>(simple32) grid to pixel !
         this.gridX = Math.floor(x / 32);
         this.gridY = Math.floor(y / 32);
-        this.nmr=z
+        this.nmr = z
         this.pixelX = this.gridX * 32;
         this.pixelY = this.gridY * 32;
         this.element = this.createEnemyono();
@@ -43,29 +43,29 @@ class Enemy {
     getValidDirections() {
         const directions = [];
         // Check if valid dirxection*4
-        if (this.isValidCARE(this.gridX, this.gridY - 1)) {
+        if (this.isValidGrid(this.gridX, this.gridY - 1)) {
             directions.push('up');
         }
-        if (this.isValidCARE(this.gridX, this.gridY + 1)) {
+        if (this.isValidGrid(this.gridX, this.gridY + 1)) {
             directions.push('down');
         }
-        if (this.isValidCARE(this.gridX - 1, this.gridY)) {
+        if (this.isValidGrid(this.gridX - 1, this.gridY)) {
             directions.push('left');
         }
-        if (this.isValidCARE(this.gridX + 1, this.gridY)) {
+        if (this.isValidGrid(this.gridX + 1, this.gridY)) {
             directions.push('right');
         }
 
         return directions;
     }
 
-    isValidCARE(x, y) {
+    isValidGrid(x, y) {
         //    ris valid if green
-        if (mapArray[y][x] != 1) {
+        if ((mapArray[y][x] != 1) || (bombCoords[0] == x && bombCoords[1] == y)) {
             return false
         } else {
 
-            return mapArray[y][x] === 1 && mapboom[x,y] != 1; // if ok  if green !!!
+            return mapArray[y][x] === 1; // if ok  if green !!!
 
         }
     }
@@ -73,20 +73,17 @@ class Enemy {
     move() {
 
         SetEnemyCoords(this.pixelX / 32, this.pixelY / 32)
-        // console.log("X,Y",this.pixelX/32,this.pixelY/32)
-        // if ((this.pixelX/32)<10){
-        //     console.log(this.pixelX/32)
-        // }
+
         if (enemyCoords[3] == 1) {
             enemyCoords[3] = 0
 
-            console.log("this.nmr:",this.nmr)
+            console.log("this.nmr:", this.nmr)
             // Do the animation then remove it 
             // this.element.remove()
-            this.element.style.backgroundColor="red"
-            
+            this.element.style.backgroundColor = "red"
+
         }
- 
+
 
         if (this.isMoving) return;
 
@@ -103,7 +100,7 @@ class Enemy {
         }
 
         // Check if direction position valid
-        if (!this.isValidCARE(nextGridX, nextGridY)) {
+        if (!this.isValidGrid(nextGridX, nextGridY)) {
             this.direction = this.getRandomDirection();
             return;
         }
@@ -113,7 +110,7 @@ class Enemy {
         const NextPixelX = nextGridX * 32;
         const NextPixelY = nextGridY * 32;
 
-        const moveTonext = () => {
+        const moveToNext = () => {
             let ARREVETOTARGER = false;
 
             // Move towards target position
@@ -133,8 +130,7 @@ class Enemy {
             // THE DISTENCE BETWEN TO POINT XA AND XB ITS JUST  THE DEFFERENCE BETWEN |XA - XB|  CHEK MY FILE RAPPELEMATHEMATIQUE.TXT TO LEARN MORE 
             const diffX = Math.abs(this.pixelX - NextPixelX);
             const diffY = Math.abs(this.pixelY - NextPixelY);
-            // console.log("diffXEnemy=>", diffX , "\ndiffYenemy=>", diffY);
-            
+
 
             if (diffX < this.moveSpeed && diffY < this.moveSpeed) {
                 // Snap to gr
@@ -151,11 +147,11 @@ class Enemy {
                 this.isMoving = false;
             } else {
                 // search how you can make it in the start of this func
-                requestAnimationFrame(moveTonext);
+                requestAnimationFrame(moveToNext);
             }
         };
 
-        moveTonext();
+        moveToNext();
     }
 
     update() {
@@ -184,13 +180,13 @@ export class EnemyGenerator {
     constructor(map, numberOfEnemies) {
         this.map = map;
         this.enemies = [];
-         this.numberOfEnemies = numberOfEnemies;
+        this.numberOfEnemies = numberOfEnemies;
         this.init();
     }
 
     init() {
         for (let i = 0; i < this.numberOfEnemies; i++) {
-            this.createEnemy(i+1);
+            this.createEnemy(i + 1);
         }
     }
     //as always grid then pixel operation >>>> *32
@@ -201,7 +197,7 @@ export class EnemyGenerator {
             y = Math.floor(Math.random() * (mapArray.length - 2)) + 1;
         } while (mapArray[y][x] !== 1);
 
-        const enemy = new Enemy(x * 32, y * 32,z);
+        const enemy = new Enemy(x * 32, y * 32, z);
         this.enemies.push(enemy);
         this.map.appendChild(enemy.element);
         enemy.startMoving();
