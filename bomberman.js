@@ -280,22 +280,31 @@ export class MapHero {
     }
 
     boombandhero(Xboomb, Yboomb) {
-        let herox = this.gridX
-        let heroy = this.gridY
-        console.log("HEROX=>", herox);
+        let heroX = this.gridX
+        let heroY = this.gridY
+        console.log("HEROX=>", heroX);
         console.log("XBOOOMB=>", Xboomb);
-        console.log("HEROY=>", heroy);
+        console.log("HEROY=>", heroY);
         console.log("YBOOOMB=>", Yboomb);
 
-
-
-        if ((Math.abs(Xboomb - herox) < 2) && (Math.abs(Xboomb - herox) !== 0)) {
-            console.log("HerooX destroooooooooooy");
-
-            this.currentDirection = directions.destroy;
-        } else if ((Math.abs(Yboomb - heroy) < 2) && (Math.abs(Yboomb - heroy) !== 0)) {
-            console.log("HerooY destroooooooooooy");
-            this.currentDirection = directions.destroy;
+        if (heroX === Xboomb && heroY === Yboomb){
+            console.log("HERO=BOMB=>", heroX, Xboomb);
+            
+            this.currentDirection = directions.destroy
+        }
+        const exploDir = [
+            {dx:0, dy:1},
+            {dx:0, dy:-1},
+            {dx:1, dy:0},
+            {dx:-1, dy:0}
+        ]
+        for (const dir of exploDir){
+            const exploX = Xboomb + dir.dx;
+            const exploY = Yboomb + dir.dy;
+            if (heroX === exploX && heroY === exploY){
+                console.log("Heroo destroooooooooooy");
+                this.currentDirection = directions.destroy
+            }
         }
     }
 
@@ -307,13 +316,10 @@ export class MapHero {
             { dx: 1, dy: 0 },
             { dx: -1, dy: 0 }
         ];
-
         this.createImgExplosion(gridX, gridY);
-
         directions.forEach(dir => {
             const newX = gridX + dir.dx;
             const newY = gridY + dir.dy;
-
             if (mapArray[newY] && mapArray[newY][newX]) {
                 this.createImgExplosion(newX, newY);
             }
