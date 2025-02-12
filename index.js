@@ -101,4 +101,3 @@ window.addEventListener('keydown', (e) => {
 
 let level1 = new mapClass()
 level1.drawMap(mapArray, 0.1)
-0
