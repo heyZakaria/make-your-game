@@ -1,13 +1,16 @@
 import { mapArray } from "./map.js";
-import { SetEnemyCoords, killTheEnemy } from "./index.js";
+import { SetEnemyCoords, killTheEnemy, enemyCoords, gamePaused } from "./index.js";
+import { bombCoords } from "./bomberman.js";
+
+export let ID = []
 
 
-class Enemy {
-    constructor(x, y) {
+export class Enemy {
+    constructor(x, y, z) {
         //setup grid then >>>(simple32) grid to pixel !
         this.gridX = Math.floor(x / 32);
         this.gridY = Math.floor(y / 32);
-
+        this.nmr = z
         this.pixelX = this.gridX * 32;
         this.pixelY = this.gridY * 32;
         this.element = this.createEnemyono();
@@ -15,9 +18,11 @@ class Enemy {
         this.moveSpeed = 2;
         this.moveInterval = null;
         this.isMoving = false;
+
     }
 
     createEnemyono() {
+
         let enemy = document.createElement("div");
         enemy.style.width = "32px";
         enemy.style.height = "32px";
@@ -26,8 +31,6 @@ class Enemy {
         enemy.style.transform = `translate3d(${this.pixelX}px, ${this.pixelY}px, 0px)`;
         return enemy;
     }
-
-
 
     getRandomDirection() {
         const validDirections = this.getValidDirections();
@@ -42,27 +45,26 @@ class Enemy {
 
     getValidDirections() {
         const directions = [];
-
         // Check if valid dirxection*4
-        if (this.isValidCARE(this.gridX, this.gridY - 1)) {
+        if (this.isValidGrid(this.gridX, this.gridY - 1)) {
             directions.push('up');
         }
-        if (this.isValidCARE(this.gridX, this.gridY + 1)) {
+        if (this.isValidGrid(this.gridX, this.gridY + 1)) {
             directions.push('down');
         }
-        if (this.isValidCARE(this.gridX - 1, this.gridY)) {
+        if (this.isValidGrid(this.gridX - 1, this.gridY)) {
             directions.push('left');
         }
-        if (this.isValidCARE(this.gridX + 1, this.gridY)) {
+        if (this.isValidGrid(this.gridX + 1, this.gridY)) {
             directions.push('right');
         }
 
         return directions;
     }
 
-    isValidCARE(x, y) {
+    isValidGrid(x, y) {
         //    ris valid if green
-        if (mapArray[y][x] != 1) {
+        if ((mapArray[y][x] != 1) || (bombCoords[0] == x && bombCoords[1] == y)) {
             return false
         } else {
 
@@ -75,10 +77,14 @@ class Enemy {
 
         SetEnemyCoords(this.pixelX / 32, this.pixelY / 32)
 
-        if (killTheEnemy == true) {
-            killTheEnemy = false
+        if (enemyCoords[3] == 1) {
+            enemyCoords[3] = 0
+
+            console.log("this.nmr:", this.nmr)
             // Do the animation then remove it 
-            this.element.remove()
+            // this.element.remove()
+            this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
+           
         }
 
 
@@ -97,7 +103,7 @@ class Enemy {
         }
 
         // Check if direction position valid
-        if (!this.isValidCARE(nextGridX, nextGridY)) {
+        if (!this.isValidGrid(nextGridX, nextGridY)) {
             this.direction = this.getRandomDirection();
             return;
         }
@@ -107,8 +113,8 @@ class Enemy {
         const NextPixelX = nextGridX * 32;
         const NextPixelY = nextGridY * 32;
 
-        const moveTonext = () => {
-            let ARREVETOTARGER = false;
+        const moveToNext = () => {
+            let arreveToTarget = false;
 
             // Move towards target position
             if (this.pixelX < NextPixelX) {
@@ -128,26 +134,27 @@ class Enemy {
             const diffX = Math.abs(this.pixelX - NextPixelX);
             const diffY = Math.abs(this.pixelY - NextPixelY);
 
+
             if (diffX < this.moveSpeed && diffY < this.moveSpeed) {
                 // Snap to gr
                 this.pixelX = NextPixelX;
                 this.pixelY = NextPixelY;
                 this.gridX = nextGridX;
                 this.gridY = nextGridY;
-                ARREVETOTARGER = true;
+                arreveToTarget = true;
             }
 
             this.update();
 
-            if (ARREVETOTARGER) {
+
+            if (arreveToTarget) {
                 this.isMoving = false;
             } else {
-                // search how you can make it in the start of this func
-                requestAnimationFrame(moveTonext);
+                ID.push(requestAnimationFrame(moveToNext))
+
             }
         };
-
-        moveTonext();
+        moveToNext();
     }
 
     update() {
@@ -169,9 +176,9 @@ class Enemy {
             }
         }, 50);
     }
+
 }
-
-
+let D
 export class EnemyGenerator {
     constructor(map, numberOfEnemies) {
         this.map = map;
@@ -182,23 +189,26 @@ export class EnemyGenerator {
 
     init() {
         for (let i = 0; i < this.numberOfEnemies; i++) {
-            this.createEnemy();
+            this.createEnemy(i + 1)
         }
+        D = this.enemies
+        return this.enemies
+
     }
     //as always grid then pixel operation >>>> *32
-    createEnemy() {
+    createEnemy(z) {
         let x, y;
         do {
             x = Math.floor(Math.random() * (mapArray[0].length - 2)) + 1;
             y = Math.floor(Math.random() * (mapArray.length - 2)) + 1;
         } while (mapArray[y][x] !== 1);
 
-        const enemy = new Enemy(x * 32, y * 32);
+        const enemy = new Enemy(x * 32, y * 32, z);
         this.enemies.push(enemy);
         this.map.appendChild(enemy.element);
         enemy.startMoving();
+        enemy.move()
 
     }
-
 
 }

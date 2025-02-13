@@ -25,6 +25,8 @@ export let mapArray = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
+export let Speed = [2, 4, 6]
+
 mapSence.style.height = mapArray.length * 32 + "px"
 mapSence.style.width = mapArray[0].length * 32 + "px"
 
@@ -43,26 +45,15 @@ blockImage.src = `./assets/block.png`
 greenBlockImage.src = `./assets/greenBlock.png`
 
 
-addEventListener("resize", function () {
 
-    if (window.innerWidth < 850) {
-
-        tileSize = 22 + "px"
-    }
-
-});
 
 export class mapClass {
 
-    constructor(tileSize) {
-        // there is no need for those
-        // we can just change in the mapArray directly to control the map size
-        // this.height = tileSize  * mapArray.length
-        // this.width = tileSize  * mapArray[0].length
+    constructor() {
+       
     }
 
-
-    drawMap = function (mapArr) {
+    drawMap = function (mapArr, R) {
 
         let i = 0
         let j = 0
@@ -74,7 +65,7 @@ export class mapClass {
             for (let column of row) {
                 j++
 
-                if (Math.random() < 0.1 && column == 1) {
+                if (Math.random() < R && column == 1) {
                     mapArray[i - 1][j - 1] = 2
 
                     column = 2
@@ -130,8 +121,3 @@ export class mapClass {
 
     }
 }
-
-
-
-
-
