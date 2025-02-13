@@ -1,12 +1,15 @@
 import { enemyCoords, numbreofenemy } from "./index.js";
 import { mapArray, mapClass } from "./map.js";
 import { directions, keys, heroConfig, greenBlockImage, boombimage, } from "./index.js";
-let nbrOfKilled = 0
+import { EnemyGenerator } from "./enemy.js";
+import { arr } from "./enemy.js";
+import { hero } from "./index.js";
+ let nbrOfKilled = 0
 let mapSence = document.getElementById("map")
 let findDoor = false
 let doorCoords = [-1, -1]
 
-
+export let cnt=0
 let isBombed = false
 
 
@@ -45,13 +48,33 @@ function creatline(xa, xb,ya, yb){
 
 
 export function killEnemy(xa, xb, ya, yb) {
-    return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb) < 2)
+    // return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb) < 3)
+    //Xboomb, enemyCoords[0], Yboomb, enemyCoords[1]
+    let dx=Math.abs(xa-xb)
+    let dy=Math.abs(ya-yb)
+
+    return (( dx==0||dx==1)&&(dy==0||dy==1)&&(dx+dy!=2))
 
 }
 
+function enemykillHero(xa, xb, ya, yb ) {
+//enemyCoords[0], this.gridX, enemyCoords[1], this.gridY
+let dx=Math.abs(xa-xb)
+let dy=Math.abs(ya-yb)
+return (dx==0 )&& (dy==0)
+
+}
 
 function killHero(xa, xb, ya, yb) {
-    return (Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)) < 2)
+    // return (Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)) < 2)
+    //Xboomb, herox, Yboomb, heroy
+    let dx=Math.abs(xa-xb)
+    let dy=Math.abs(ya-yb)
+
+    return (( dx==0||dx==1)&&(dy==0||dy==1)&&(dx+dy!=2))
+        
+    
+
 }
 
 
@@ -175,11 +198,38 @@ export class MapHero {
 
     moveHero() {
 
+ 
+        // && arr.length==numbreofenemy
+        //go to next levl
+        if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && arr.length==numbreofenemy) {
+            // console.log(level)
+           
+            mapSence.innerHTML="## you win ##"
+              
+                        // // mapSence.remove()
+                        
+                        // // let mapSence2e = document.getElementById("map1")
 
-        if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && nbrOfKilled == numbreofenemy) {
+                          
+                        // // mapArray=""
+                        // let level2 = new mapClass()
+                        // level2.drawMap(mapArray, 0.2)
 
-            let level1 = new mapClass
-            level1.drawMap(mapArray)
+                        // const hero1 = new MapHero(mapSence);
+                        // hero1.initializeControls()
+                 
+                        
+
+
+                        // let level2 = new mapClass()
+                        // level2.drawMap(mapArray, 0.3)
+                         
+                        // let hero = new MapHero(mapSence);
+                        
+                        
+                        
+                        // const h = new EnemyGenerator(mapSence, numbreofenemy)
+                        // hero.initializeControls()
         }
 
 
@@ -286,7 +336,7 @@ export class MapHero {
 
             let brickBombed = document.querySelector(`.canBomb_${ybriks * 32}_${xbriks * 32}`)
 
-            if ((Math.random() < 0.3) && (findDoor == false)) {
+            if ((Math.random() < 1) && (findDoor == false)) {
 
                 brickBombed.style.background = 'purple';
                 findDoor = true
@@ -302,8 +352,10 @@ export class MapHero {
 
 
     boombEnemy(Xboomb, Yboomb) {
+        console.log("booooooooomb@@@@@@@@@@")
+        
         if (killEnemy(Xboomb, enemyCoords[0], Yboomb, enemyCoords[1])) {
-
+        
 
             enemyCoords[3] = 1
             nbrOfKilled++
@@ -315,6 +367,8 @@ export class MapHero {
     boombHero(Xboomb, Yboomb) {
         let herox = this.gridX
         let heroy = this.gridY
+        console.log("herox,heroy",herox,heroy)
+        console.log("xboomb,yboomb",Xboomb,Yboomb)
 
 
         if (killHero(Xboomb, herox, Yboomb, heroy)) {
@@ -357,7 +411,7 @@ export class MapHero {
         }, 300);
     }
     render() {
-        if (killHero(enemyCoords[0], this.gridX, enemyCoords[1], this.gridY)) {
+        if (enemykillHero(enemyCoords[0], this.gridX, enemyCoords[1], this.gridY)) {
             this.currentDirection = directions.destroy;
         }
         const curHeroDirection = this.heroImages[this.currentDirection];
@@ -370,14 +424,14 @@ export class MapHero {
         let CountPerFrame = 0
         let gameTime = 200
         let Time = document.getElementById("Time")
-        Time.innerText = "Time" + " " + gameTime
+        // Time.innerText = "Time" + " " + gameTime
 
         const gameLoop = () => {
             this.moveHero();
             CountPerFrame += 16.7
             if (CountPerFrame >= 1000) {
                 gameTime--
-                Time.innerText = "Time" + " " + gameTime
+                // Time.innerText = "Time" + " " + gameTime
                 CountPerFrame = 0
             }
             this.render();

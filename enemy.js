@@ -1,7 +1,7 @@
 import { mapArray } from "./map.js";
 import { SetEnemyCoords, killTheEnemy, enemyCoords } from "./index.js";
 import { bombCoords } from "./bomberman.js";
-
+ export let arr=[]
 class Enemy {
     constructor(x, y, z) {
         //setup grid then >>>(simple32) grid to pixel !
@@ -12,7 +12,7 @@ class Enemy {
         this.pixelY = this.gridY * 32;
         this.element = this.createEnemyono();
         this.direction = this.getRandomDirection();
-        this.moveSpeed = 2;
+        this.moveSpeed = 1;
         this.moveInterval = null;
         this.isMoving = false;
     }
@@ -78,6 +78,9 @@ class Enemy {
             enemyCoords[3] = 0
 
             console.log("this.nmr:", this.nmr)
+            arr.push(this.nmr)
+            console.log("w",arr.length)
+             
             // Do the animation then remove it 
             // this.element.remove()
             this.element.style.backgroundColor = "red"
@@ -202,6 +205,11 @@ export class EnemyGenerator {
         this.map.appendChild(enemy.element);
         enemy.startMoving();
 
+
+        
+         
+      
+            
     }
 
 

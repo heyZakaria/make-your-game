@@ -49,10 +49,7 @@ greenBlockImage.src = `./assets/greenBlock.png`
 
 export class mapClass {
 
-    constructor() {
-       
-    }
-
+  
 
     drawMap = function (mapArr, R) {
 

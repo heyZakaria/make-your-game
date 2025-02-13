@@ -1,8 +1,8 @@
 import { mapClass, mapArray } from "./map.js";
 import { MapHero } from "./bomberman.js";
 import { EnemyGenerator } from "./enemy.js";
-
-export let numbreofenemy = 10
+export let numbreofenemy = 1
+import { cnt } from "./bomberman.js";
 // When the block is destroyed and becomes gress, The Hero go below the gress
 // Maybe because we draw the map in index.js and bomberman.js
 let mapSence = document.getElementById("map")
@@ -67,37 +67,46 @@ let isWin = false
 let isLose = false
 
 let audio = new Audio("./assets/playGame.mp3")
-
-window.addEventListener('keydown', (e) => {
-    if (e.code == "KeyP") {
-        if (startGame) {
-            settingScreen.style.opacity = "0"
-            gameSetting.style.opacity  = "0"
-            const h = new EnemyGenerator(mapSence, 5)
-            const hero = new MapHero(mapSence);
-            hero.initializeControls()
-            audio.play()
-            startGame = false
-        } else {
-            audio.pause()
-            gamePaused = true
-            settingScreen.style.backdropFilter = "blur(100px)"
-            settingScreen.style.opacity = "0.5"
-            gameSetting.style.opacity  = "1"
-            title.innerHTML = "Game is Paused"
-            instructions.innerHTML = "Press R to Resume"
-        }
-    }
-    if (e.code == "KeyR") {
-        if (gamePaused) {
-            settingScreen.style.opacity = "0"
-            gameSetting.style.opacity  = "0"
-            audio.play()
-        }
-    }
-});
-
+settingScreen.style.opacity = "0"
+gameSetting.style.opacity  = "0"
 
 
 let level1 = new mapClass()
-level1.drawMap(mapArray, 0.1)
+level1.drawMap(mapArray, 0.2)
+
+
+export let hero = new MapHero(mapSence);
+
+
+
+const h = new EnemyGenerator(mapSence, numbreofenemy)
+hero.initializeControls()
+
+// window.addEventListener('keydown', (e) => {
+//     if (e.code == "KeyP") {
+    
+//         if (startGame) {
+ 
+//             audio.play()
+//             startGame = false
+//         } else {
+//             audio.pause()
+//             gamePaused = true
+//             settingScreen.style.backdropFilter = "blur(100px)"
+//             settingScreen.style.opacity = "0.5"
+//             gameSetting.style.opacity  = "1"
+//             title.innerHTML = "Game is Paused"
+//             instructions.innerHTML = "Press R to Resume"
+//         }
+//     }
+//     if (e.code == "KeyR") {
+//         if (gamePaused) {
+//             settingScreen.style.opacity = "0"
+//             gameSetting.style.opacity  = "0"
+//             audio.play()
+//         }
+//     }
+// });
+
+
+ 
