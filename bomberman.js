@@ -1,6 +1,6 @@
 import { blockImage, enemyCoords, numbreofenemy } from "./index.js";
 import { mapArray, mapClass } from "./map.js";
-import { directions, keys, heroConfig, greenBlockImage, boombimage, } from "./index.js";
+import { directions, keys, heroConfig, greenBlockImage, boombimage, exploImg} from "./index.js";
 let nbrOfKilled = 0
 let mapSence = document.getElementById("map")
 let findDoor = false
@@ -48,12 +48,6 @@ export function killEnemy(xa, xb, ya, yb) {
     return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb) < 2)
 
 }
-
-
-function killHero(xa, xb, ya, yb) {
-    return (Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)) < 2)
-}
-
 
 export class MapHero {
 
@@ -174,14 +168,11 @@ export class MapHero {
     }
 
     moveHero() {
-
-
         if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && nbrOfKilled == numbreofenemy) {
 
             let level1 = new mapClass
             level1.drawMap(mapArray)
         }
-
 
         if (!this.isMoving)
             return;
@@ -319,11 +310,12 @@ export class MapHero {
 
         if (heroX === Xboomb && heroY === Yboomb){
             this.currentDirection = directions.destroy;
+            returnp
         }
 
         const explosionDir = [
             { dx: 0, dy: -1 },
-            { dx: 0, dy: -1 },
+            { dx: 0, dy: 1 },
             { dx: 1, dy: 0 },
             { dx: -1, dy: 0 }
         ]
@@ -341,7 +333,7 @@ export class MapHero {
     createExplosion(gridX, gridY) {
         const directions = [
             { dx: 0, dy: -1 },
-            { dx: 0, dy: -1 },
+            { dx: 0, dy: 1 },
             { dx: 1, dy: 0 },
             { dx: -1, dy: 0 }
         ];
@@ -349,11 +341,11 @@ export class MapHero {
         this.createImgExplosion(gridX, gridY);
 
         directions.forEach(dir => {
-            const newX = gridX + dir.dx;
-            const newY = gridY + dir.dy;
-
-            if (mapArray[newY] && mapArray[newY][newX]) {
-                this.createImgExplosion(newX, newY);
+            const exploX = gridX + dir.dx;
+            const exploY = gridY + dir.dy;  
+            
+            if (mapArray[exploY] && mapArray[exploY][exploX]) {
+                this.createImgExplosion(exploX, exploY);
             }
         });
     }
@@ -363,7 +355,7 @@ export class MapHero {
         explo.style.width = `${heroConfig.tileSize}px`
         explo.style.height = `${heroConfig.tileSize}px`
         explo.style.position = "absolute"
-        explo.style.backgroundColor = "rgb(255, 72, 0)"
+        explo.style.backgroundImage = `url(${exploImg.src})`
         explo.style.transform = `translate3d(${gridX * heroConfig.tileSize}px, ${gridY * heroConfig.tileSize}px, 0px)`;
         mapSence.appendChild(explo);
 

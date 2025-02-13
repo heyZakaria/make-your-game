@@ -12,12 +12,14 @@ export const blockImage = new Image
 export const greenBlockImage = new Image
 export const enemymoveemage = new Image
 export const boombimage = new Image
+export const exploImg = new Image
 
 tileImage.src = `./assets/tile.png`
 blockImage.src = `./assets/block.png`
 greenBlockImage.src = `./assets/greenBlock.png`
 enemymoveemage.src = `./assets/enemy.png`
 boombimage.src = `./assets/bomb.png`
+exploImg.src = `./assets/3.png`
 
 export const directions = {
     up: "ArrowUp",
