@@ -84,7 +84,7 @@ export class Enemy {
             // Do the animation then remove it 
             // this.element.remove()
             this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
-           
+
         }
 
 
@@ -175,9 +175,9 @@ export class Enemy {
             }
         }, 50);
     }
-
 }
-let D
+
+
 export class EnemyGenerator {
     constructor(map, numberOfEnemies) {
         this.map = map;
@@ -190,7 +190,6 @@ export class EnemyGenerator {
         for (let i = 0; i < this.numberOfEnemies; i++) {
             this.createEnemy(i + 1)
         }
-        D = this.enemies
         return this.enemies
 
     }
@@ -210,4 +209,4 @@ export class EnemyGenerator {
 
     }
 
-}
+} 

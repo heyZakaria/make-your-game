@@ -1,6 +1,6 @@
 import { mapClass, mapArray } from "./map.js";
 import { MapHero } from "./bomberman.js";
-import { EnemyGenerator, ID } from "./enemy.js";
+import { EnemyGenerator } from "./enemy.js";
 
 export let numbreofenemy = 5
 // When the block is destroyed and becomes gress, The Hero go below the gress
@@ -26,7 +26,7 @@ export const directions = {
     down: "ArrowDown",
     left: "ArrowLeft",
     right: "ArrowRight",
-    destroy:"destroy",
+    destroy: "destroy",
 };
 
 export const keys = {
@@ -45,7 +45,7 @@ export const heroConfig = {
 
 
 
-export let enemyCoords = [-1, -1,0,0]
+export let enemyCoords = [-1, -1, 0, 0]
 export let killTheEnemy = false
 
 export function SetEnemyCoords(x, y) {
@@ -75,41 +75,40 @@ let audio = new Audio("./assets/playGame.mp3")
 window.addEventListener('keydown', (e) => {
     if (e.code == "KeyP") {
         if (startGame) {
-        
+
             settingScreen.style.opacity = "0"
-            gameSetting.style.opacity  = "0"
+            gameSetting.style.opacity = "0"
             let Enemies = new EnemyGenerator(mapSence, 5)
-                      
-           const hero = new MapHero(mapSence);
+            const hero = new MapHero(mapSence);
             hero.initializeControls()
             audio.play()
             audio.pause()
 
             startGame = false
             return
-        } 
-        
-        if(!gamePaused && !startGame){
-            
+        }
+
+        if (!gamePaused && !startGame) {
+
             audio.pause()
             gamePaused = true
             settingScreen.style.opacity = "0.1"
-            gameSetting.style.opacity  = "1"
+            gameSetting.style.opacity = "1"
             title.innerHTML = "Game is Paused"
             instructions.innerHTML = "Press R to Resume"
-           
-        
+
+
         }
-        
+
     }
     if (e.code == "KeyR") {
         if (gamePaused) {
             settingScreen.style.opacity = "0"
-            gameSetting.style.opacity  = "0"
-           // audio.play()
+            gameSetting.style.opacity = "0"
+            // audio.play()
             gamePaused = false
-            
-            
+
+
         }
     }
 });

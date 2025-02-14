@@ -2,6 +2,9 @@
     margin: 0;
 }
 
+body{
+    background-color: darkslategrey;
+}
 h1 {
     color: white;
 }
@@ -34,15 +37,15 @@ h1 {
 }
 
 #Time {
-    background-color: aqua;
+    background-color: whitesmoke;
 }
 
 #Score {
-    background-color: aquamarine;
+    background-color: whitesmoke;
 }
 
 #Rwaa7 {
-    background-color: blanchedalmond;
+    background-color: whitesmoke;
 }
 
 img {

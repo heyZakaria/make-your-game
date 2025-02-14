@@ -1,14 +1,11 @@
 import { blockImage, enemyCoords, numbreofenemy } from "./index.js";
 import { mapArray, mapClass } from "./map.js";
-import { directions, keys, heroConfig, greenBlockImage, boombimage, exploImg} from "./index.js";
+import { directions, keys, heroConfig, greenBlockImage, boombimage, exploImg } from "./index.js";
 let nbrOfKilled = 0
 let mapSence = document.getElementById("map")
 let findDoor = false
 let doorCoords = [-1, -1]
-
-
 let isBombed = false
-
 
 export let bombCoords = []
 
@@ -43,10 +40,33 @@ function creatline(xa, xb,ya, yb){
     } */
 
 
+export function killEnemy(Xboomb, Xenemy, Yboomb, Yenemy) {
+    // console.log(Xboomb, Yboomb, "B");
+    // console.log(Xenemy * 32, Yenemy * 32, "E");
 
-export function killEnemy(xa, xb, ya, yb) {
-    return Math.sqrt((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb) < 2)
+    let xGap = Math.abs(Xboomb - (Xenemy * 32))
+    let yGap = Math.abs(Yboomb - (Yenemy * 32))
+    // console.log(xGap);
+    // console.log(yGap);
 
+    // return ((xGap == 0 || xGap == 1 || xGap == 2) && (yGap == 0 || yGap == 1 || yGap == 2) && (xGap + yGap != 2))
+    return ((xGap <= 40) || (yGap <= 40))
+}
+
+function killHero(Xboomb, Xhero, Yboomb, Yhero) {
+
+    let xGap = Math.abs(Xboomb - Xhero)
+    let yGap = Math.abs(Yboomb - Yhero)
+
+    return ((xGap == 0 || xGap == 1) && (yGap == 0 || yGap == 1) && (xGap + yGap != 2))
+}
+
+function enemykillHero(Xenemy, Xhero, Yenemy, Yhero) {
+
+    let xGap = Math.abs(Xenemy * 32 - Xhero)
+    let yGap = Math.abs(Yenemy * 32 - Yhero)
+
+    return (xGap <= 32) && (yGap <= 32)
 }
 
 export class MapHero {
@@ -62,7 +82,6 @@ export class MapHero {
         this.nextPixelY = this.gridY * heroConfig.tileSize;
 
         this.isMoving = false;
-
 
         this.heroImages = {
             [directions.up]: new Image(),
@@ -208,72 +227,73 @@ export class MapHero {
         }
     }
 
-    createBomb(x, y) {
+    createBomb(xBombGrid, yBombGrid) {
         if (isBombed) {
             return
         }
         isBombed = true
 
-        let Xboomb = 32 * (x);
-        let Yboomb = 32 * (y);
+        bombCoords[0] = xBombGrid
+        bombCoords[1] = yBombGrid
 
-        let boomb = document.createElement('div');
-        boomb.style.width = `${32}px`;
-        boomb.style.height = `${32}px`;
-        boomb.style.position = "absolute";
-        boomb.style.overflow = "hidden";
-        boomb.style.backgroundImage = `url(${boombimage.src})`
-        boomb.style.transform = `translate3d(${Xboomb}px, ${Yboomb}px, 0px)`;
-        bombCoords[0] = (Xboomb / 32)
-        bombCoords[1] = (Yboomb / 32)
+        let Xboomb = 32 * xBombGrid;
+        let Yboomb = 32 * yBombGrid;
 
-        mapSence.appendChild(boomb);
+        let bomb = document.createElement('div');
+        bomb.style.width = `${32}px`;
+        bomb.style.height = `${32}px`;
+        bomb.style.position = "absolute";
+        bomb.style.overflow = "hidden";
+        bomb.style.backgroundImage = `url(${boombimage.src})`
+        bomb.style.transform = `translate3d(${Xboomb}px, ${Yboomb}px, 0px)`;
+        mapSence.appendChild(bomb);
 
         setTimeout(() => {
-            this.createExplosion(Math.ceil(Xboomb / heroConfig.tileSize), Math.ceil(Yboomb / heroConfig.tileSize))
-            this.boombBriks(Math.ceil(Xboomb / heroConfig.tileSize), Math.ceil(Yboomb / heroConfig.tileSize))
-
-            this.boombEnemy(Xboomb / heroConfig.tileSize, Yboomb / heroConfig.tileSize)
-
-            this.boombHero((Xboomb) / heroConfig.tileSize, Yboomb / heroConfig.tileSize)
+            this.createExplosion(xBombGrid, yBombGrid)
+            this.boombBriks(xBombGrid, yBombGrid)
+            this.boombEnemy(Xboomb, Yboomb)
+            this.boombHero(xBombGrid, yBombGrid)
 
             bombCoords[0] = -1
             bombCoords[1] = -1
-            boomb.remove();
+            bomb.remove();
             isBombed = false
         }, 3000);
 
 
-    }
+    } game
 
     boombBriks(Xboomb, Yboomb) {
 
         let xbriks = -1
         let ybriks = -1
-        let letsboomb = false
 
         if (mapArray[Yboomb + 1][Xboomb] === 2) {
+            // Check Down
             xbriks = Yboomb + 1
             ybriks = Xboomb
-            letsboomb = true
+            bombIt()
         }
         if (mapArray[Yboomb][Xboomb + 1] === 2) {
+            // Check Right
             xbriks = Yboomb
             ybriks = Xboomb + 1
-            letsboomb = true
+            bombIt()
         }
         if (mapArray[Yboomb - 1][Xboomb] === 2) {
+            // Check UP
             xbriks = Yboomb - 1
             ybriks = Xboomb
-            letsboomb = true
+            bombIt()
         }
         if (mapArray[Yboomb][Xboomb - 1] === 2) {
+            // Check Left
             xbriks = Yboomb
             ybriks = Xboomb - 1
-
-            letsboomb = true
+            bombIt()
         }
-        if (letsboomb) {
+
+        function bombIt() {
 
             mapArray[xbriks][ybriks] = 1
 
@@ -295,11 +315,12 @@ export class MapHero {
 
 
     boombEnemy(Xboomb, Yboomb) {
+
         if (killEnemy(Xboomb, enemyCoords[0], Yboomb, enemyCoords[1])) {
 
             enemyCoords[3] = 1
             nbrOfKilled++
-            console.log("killed", nbrOfKilled)
+
         }
     }
 
@@ -308,9 +329,9 @@ export class MapHero {
         let heroX = this.gridX
         let heroY = this.gridY
 
-        if (heroX === Xboomb && heroY === Yboomb){
+        if (killHero(Xboomb, heroX, Yboomb, heroY)) {
+
             this.currentDirection = directions.destroy;
-            returnp
         }
 
         const explosionDir = [
@@ -323,7 +344,7 @@ export class MapHero {
             const exploX = Xboomb + dirExplo.dx
             const exploY = Yboomb + dirExplo.dy
 
-            if (heroX === exploX && heroY === exploY){
+            if (heroX === exploX && heroY === exploY) {
                 this.currentDirection = directions.destroy;
             }
         })
@@ -332,18 +353,19 @@ export class MapHero {
     // PArtie de lexplosion
     createExplosion(gridX, gridY) {
         const directions = [
-            { dx: 0, dy: -1 },
-            { dx: 0, dy: 1 },
-            { dx: 1, dy: 0 },
-            { dx: -1, dy: 0 }
+            { dx: 0, dy: 1 }, // UP
+            { dx: 0, dy: -1 }, // Down
+            { dx: 1, dy: 0 }, // Right
+            { dx: -1, dy: 0 } // Left
         ];
 
         this.createImgExplosion(gridX, gridY);
 
         directions.forEach(dir => {
+
             const exploX = gridX + dir.dx;
-            const exploY = gridY + dir.dy;  
-            
+            const exploY = gridY + dir.dy;
+
             if (mapArray[exploY] && mapArray[exploY][exploX]) {
                 this.createImgExplosion(exploX, exploY);
             }
@@ -366,6 +388,10 @@ export class MapHero {
 
     }
     render() {
+        if (enemykillHero(enemyCoords[0], this.pixelX, enemyCoords[1], this.pixelY)) {
+            this.currentDirection = directions.destroy;
+            ///// STOP THE GAME
+        }
         const curHeroDirection = this.heroImages[this.currentDirection];
         this.element.style.backgroundImage = `url(${curHeroDirection.src})`;
         this.element.style.backgroundPosition = `-${this.frameIndex * this.heroWidth}px 0px`;
