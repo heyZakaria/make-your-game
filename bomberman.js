@@ -41,16 +41,12 @@ function creatline(xa, xb,ya, yb){
 
 
 export function killEnemy(Xboomb, Xenemy, Yboomb, Yenemy) {
-    // console.log(Xboomb, Yboomb, "B");
-    // console.log(Xenemy * 32, Yenemy * 32, "E");
-
+    
     let xGap = Math.abs(Xboomb - (Xenemy * 32))
     let yGap = Math.abs(Yboomb - (Yenemy * 32))
-    // console.log(xGap);
-    // console.log(yGap);
+   
 
-    // return ((xGap == 0 || xGap == 1 || xGap == 2) && (yGap == 0 || yGap == 1 || yGap == 2) && (xGap + yGap != 2))
-    return ((xGap <= 40) || (yGap <= 40))
+    return ((xGap <= 40) && (yGap <= 40))
 }
 
 function killHero(Xboomb, Xhero, Yboomb, Yhero) {
