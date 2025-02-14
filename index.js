@@ -70,6 +70,28 @@ let isLose = false
 
 let audio = new Audio("./assets/playGame.mp3")
 
+function startGameLoop(hero) {
+    let CountPerFrame = 0
+    let gameTime = 200
+    let Time = document.getElementById("Time")
+    Time.innerText = "Time" + " " + gameTime
+
+    const gameLoop = () => {
+        hero.moveHero();
+        CountPerFrame += 16.7
+        if (CountPerFrame >= 1000) {
+            gameTime--
+            Time.innerText = "Time" + " " + gameTime
+            CountPerFrame = 0
+        }
+        hero.render();
+
+        window.requestAnimationFrame(gameLoop);
+
+    };
+    gameLoop();
+}
+
 
 
 window.addEventListener('keydown', (e) => {
@@ -81,6 +103,7 @@ window.addEventListener('keydown', (e) => {
             let Enemies = new EnemyGenerator(mapSence, 5)
             const hero = new MapHero(mapSence);
             hero.initializeControls()
+            startGameLoop(hero)
             audio.play()
             audio.pause()
 

@@ -110,7 +110,6 @@ export class MapHero {
 
         this.pressedDirections = [];
         this.initializeControls();
-        this.startGameLoop();
     }
 
     initializeControls() {
@@ -394,25 +393,4 @@ export class MapHero {
         this.element.style.transform = `translate3d(${this.pixelX}px, ${this.pixelY}px, 2px)`;
     }
 
-    startGameLoop() {
-        let CountPerFrame = 0
-        let gameTime = 200
-        let Time = document.getElementById("Time")
-        Time.innerText = "Time" + " " + gameTime
-
-        const gameLoop = () => {
-            this.moveHero();
-            CountPerFrame += 16.7
-            if (CountPerFrame >= 1000) {
-                gameTime--
-                Time.innerText = "Time" + " " + gameTime
-                CountPerFrame = 0
-            }
-            this.render();
-
-            window.requestAnimationFrame(gameLoop);
-
-        };
-        gameLoop();
-    }
 }
