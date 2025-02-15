@@ -15,7 +15,7 @@ export class Enemy {
         this.pixelY = this.gridY * 32;
         this.element = this.createEnemyono();
         this.direction = this.getRandomDirection();
-        this.moveSpeed = 1;
+        this.moveSpeed = 0.8;
         this.moveInterval = null;
         this.isMoving = false;
 
@@ -75,12 +75,11 @@ export class Enemy {
 
     move() {
 
-        SetEnemyCoords(this.pixelX / 32, this.pixelY / 32)
+        SetEnemyCoords(this.pixelX / 32, this.pixelY / 32, this.nmr)
 
-        if (enemyCoords[3] == 1) {
-            enemyCoords[3] = 0
+        if (enemyCoords[this.nmr].z == 1) {
+            enemyCoords[this.nmr].z = 0
 
-            console.log("this.nmr:", this.nmr)
             // Do the animation then remove it 
             // this.element.remove()
             this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
@@ -114,6 +113,7 @@ export class Enemy {
         const NextPixelY = nextGridY * 32;
 
         const moveToNext = () => {
+
             let arreveToTarget = false;
 
             // Move towards target position
@@ -204,6 +204,7 @@ export class EnemyGenerator {
         } while (mapArray[y][x] !== 1);
 
         const enemy = new Enemy(x * 32, y * 32, z);
+        enemy.element.className = `enemy_`
         this.enemies.push(enemy);
         this.map.appendChild(enemy.element);
 

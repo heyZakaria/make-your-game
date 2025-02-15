@@ -43,12 +43,45 @@ export const heroConfig = {
     speed: 2
 };
 
-export let enemyCoords = [-1, -1, 0, 0]
+
+export let enemyCoords = {
+    5: {
+        x: -1,
+        y: -1,
+        w: 0,
+        z: 0
+    },
+    1: {
+        x: -1,
+        y: -1,
+        w: 0,
+        z: 0
+    },
+    2: {
+        x: -1,
+        y: -1,
+        w: 0,
+        z: 0
+    },
+    3: {
+        x: -1,
+        y: -1,
+        w: 0,
+        z: 0
+    },
+    4: {
+        x: -1,
+        y: -1,
+        w: 0,
+        z: 0
+    }
+}
 export let killTheEnemy = false
 
-export function SetEnemyCoords(x, y) {
-    enemyCoords[0] = x
-    enemyCoords[1] = y
+export function SetEnemyCoords(x, y, e) {
+
+    enemyCoords[e].x = x
+    enemyCoords[e].y = y
 }
 
 let game = document.getElementById("game")
@@ -63,7 +96,6 @@ export let startGame = true
 export let gamePaused = false
 let isWin = false
 let isLose = false
-
 
 let audio = new Audio("./assets/playGame.mp3")
 let Enemies
@@ -87,9 +119,9 @@ export function startGameLoop() {
                 CountPerFrame = 0
             }
             hero.render();
+
             for (const e of Enemies) {
                 e.move()
-
             }
 
             window.requestAnimationFrame(gameLoop);
@@ -97,9 +129,6 @@ export function startGameLoop() {
     };
     gameLoop();
 }
-
-
-
 
 
 window.addEventListener('keydown', (e) => {

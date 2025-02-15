@@ -9,44 +9,21 @@ let isBombed = false
 
 export let bombCoords = []
 
+export function killEnemy(Xboomb, Yboomb, enemyCoords) {
 
-/* let line = document.createElement("div")
+    for (let i = 1; i <= 5; i++) {
 
-function creatline(xa, xb,ya, yb){
- 
-    let distence=32*Math.sqrt(((xa - xb) * (xa - xb) + (ya - yb) * (ya - yb)))
+        let xGap = Math.abs(Xboomb - enemyCoords[i].x * 32)
+        let yGap = Math.abs(Yboomb - enemyCoords[i].y * 32)
 
-    let xmid=(xa+xb)*32/2
-    let ymid=(ya+yb)*32/2
-    
-    let salopeinradian=Math.atan2((-yb+ya),(-xb+xa))
-     
-    let salopindegrees=(salopeinradian*180)/3
+        if ((xGap <= 40) && (yGap <= 40)) {
 
-   
-    line.style.top = ymid+"px"
-    line.style.left = (xmid-(distence/2))+"px"
-    line.style.width = distence+"px"
-    line.style.backgroundColor = "red"
-    line.style.position = "absolute"
-    line.style.height = "5px"
-    line.innerHTML="______________________"+distence
-    
-    // line.innerHTML="______________________________________________"
-    line.style.transform="rotate("+salopindegrees+"deg)"
-    mapSence.appendChild(line)
-    
-    
-    } */
-
-
-export function killEnemy(Xboomb, Xenemy, Yboomb, Yenemy) {
-
-    let xGap = Math.abs(Xboomb - Xenemy * 32)
-    let yGap = Math.abs(Yboomb - Yenemy * 32)
-
-    return ((xGap <= 40) && (yGap <= 40))
+            enemyCoords[i].z = 1
+            nbrOfKilled++
+        }
+    }
 }
+
 
 function killHero(Xboomb, Xhero, Yboomb, Yhero) {
 
@@ -56,12 +33,20 @@ function killHero(Xboomb, Xhero, Yboomb, Yhero) {
     return ((xGap == 0 || xGap == 1) && (yGap == 0 || yGap == 1) && (xGap + yGap != 2))
 }
 
-function enemykillHero(Xenemy, Xhero, Yenemy, Yhero) {
+function enemykillHero(enemyCoords, Xhero, Yhero) {
 
-    let xGap = Math.abs(Xenemy * 32 - Xhero)
-    let yGap = Math.abs(Yenemy * 32 - Yhero)
+    for (let i = 1; i <= 5; i++) {
 
-    return (xGap <= 31) && (yGap <= 31)
+        let xGap = Math.abs(enemyCoords[i].x * 32 - Xhero)
+        let yGap = Math.abs(enemyCoords[i].y * 32 - Yhero)
+
+        if ((xGap <= 30) && (yGap <= 30)) {
+
+            return true
+        }
+
+    }
+
 }
 
 export class MapHero {
@@ -145,11 +130,12 @@ export class MapHero {
 
     canMove(nextGridX, nextGridY) {
 
-        if (mapArray[nextGridY][nextGridX] !== 1 || (bombCoords[0] == nextGridX && bombCoords[1] == nextGridY)) {
-
+        if ((mapArray[nextGridY][nextGridX] !== 1 && mapArray[nextGridY][nextGridX] !== 3) || (bombCoords[0] == nextGridX && bombCoords[1] == nextGridY)) {
+            
             return false;
         } else {
-            return mapArray[nextGridY][nextGridX] === 1
+            
+            return true
         }
     }
 
@@ -179,6 +165,7 @@ export class MapHero {
                 break;
         }
         if (this.canMove(nextGridX, nextGridY)) {
+            
             this.currentDirection = direction;
             this.isMoving = true;
 
@@ -190,6 +177,8 @@ export class MapHero {
 
     moveHero() {
         if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && nbrOfKilled == numbreofenemy) {
+            console.log("weeeeeeee");
+            
 
             let level1 = new mapClass
             level1.drawMap(mapArray)
@@ -263,7 +252,7 @@ export class MapHero {
         }, 3000);
 
 
-    } game
+    }
 
     boombBriks(Xboomb, Yboomb) {
 
@@ -317,13 +306,7 @@ export class MapHero {
 
 
     boombEnemy(Xboomb, Yboomb) {
-
-        if (killEnemy(Xboomb, enemyCoords[0], Yboomb, enemyCoords[1])) {
-
-            enemyCoords[3] = 1
-            nbrOfKilled++
-
-        }
+        killEnemy(Xboomb, Yboomb, enemyCoords)
     }
 
 
@@ -332,11 +315,7 @@ export class MapHero {
         let heroY = this.gridY
 
         if (killHero(Xboomb, heroX, Yboomb, heroY)) {
-
             this.currentDirection = directions.destroy;
-
-
-
         }
 
         const explosionDir = [
@@ -393,7 +372,7 @@ export class MapHero {
 
     }
     render() {
-        if (enemykillHero(enemyCoords[0], this.pixelX, enemyCoords[1], this.pixelY)) {
+        if (enemykillHero(enemyCoords, this.pixelX, this.pixelY)) {
             this.currentDirection = directions.destroy;
         }
 
