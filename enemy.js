@@ -2,7 +2,7 @@ import { mapArray } from "./map.js";
 import { SetEnemyCoords, killTheEnemy, enemyCoords, gamePaused } from "./index.js";
 import { bombCoords } from "./bomberman.js";
 
-export let ID = []
+
 
 
 export class Enemy {
@@ -15,7 +15,7 @@ export class Enemy {
         this.pixelY = this.gridY * 32;
         this.element = this.createEnemyono();
         this.direction = this.getRandomDirection();
-        this.moveSpeed = 2;
+        this.moveSpeed = 1;
         this.moveInterval = null;
         this.isMoving = false;
 
@@ -149,11 +149,13 @@ export class Enemy {
             if (arreveToTarget) {
                 this.isMoving = false;
             } else {
-                ID.push(requestAnimationFrame(moveToNext))
+
+               requestAnimationFrame(moveToNext)
 
             }
-        };
-        moveToNext();
+        }
+        moveToNext()
+
     }
 
     update() {
@@ -183,14 +185,14 @@ export class EnemyGenerator {
         this.map = map;
         this.enemies = [];
         this.numberOfEnemies = numberOfEnemies;
-        this.init();
     }
 
     init() {
+        let x = []
         for (let i = 0; i < this.numberOfEnemies; i++) {
-            this.createEnemy(i + 1)
+            x.push(this.createEnemy(i + 1))
         }
-        return this.enemies
+        return x
 
     }
     //as always grid then pixel operation >>>> *32
@@ -204,9 +206,8 @@ export class EnemyGenerator {
         const enemy = new Enemy(x * 32, y * 32, z);
         this.enemies.push(enemy);
         this.map.appendChild(enemy.element);
-        enemy.startMoving();
-        enemy.move()
 
+        return enemy
     }
 
 } 

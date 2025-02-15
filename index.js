@@ -43,8 +43,6 @@ export const heroConfig = {
     speed: 2
 };
 
-
-
 export let enemyCoords = [-1, -1, 0, 0]
 export let killTheEnemy = false
 
@@ -52,8 +50,6 @@ export function SetEnemyCoords(x, y) {
     enemyCoords[0] = x
     enemyCoords[1] = y
 }
-
-
 
 let game = document.getElementById("game")
 let settingScreen = document.getElementById("settingScreen")
@@ -63,34 +59,46 @@ game.insertBefore(settingScreen, game.firstChild)
 let instructions = document.getElementById("instructions")
 let title = document.getElementById("title")
 //let gameAudio = document.getElementById("gameAudio")
-let startGame = true
+export let startGame = true
 export let gamePaused = false
 let isWin = false
 let isLose = false
 
-let audio = new Audio("./assets/playGame.mp3")
 
-function startGameLoop(hero) {
+let audio = new Audio("./assets/playGame.mp3")
+let Enemies
+let hero
+let gameTime = 200
+
+export function startGameLoop() {
     let CountPerFrame = 0
-    let gameTime = 200
+
     let Time = document.getElementById("Time")
     Time.innerText = "Time" + " " + gameTime
 
     const gameLoop = () => {
-        hero.moveHero();
-        CountPerFrame += 16.7
-        if (CountPerFrame >= 1000) {
-            gameTime--
-            Time.innerText = "Time" + " " + gameTime
-            CountPerFrame = 0
+        if (!gamePaused) {
+
+            hero.moveHero();
+            CountPerFrame += 16.7
+            if (CountPerFrame >= 1000) {
+                gameTime--
+                Time.innerText = "Time" + " " + gameTime
+                CountPerFrame = 0
+            }
+            hero.render();
+            for (const e of Enemies) {
+                e.move()
+
+            }
+
+            window.requestAnimationFrame(gameLoop);
         }
-        hero.render();
-
-        window.requestAnimationFrame(gameLoop);
-
     };
     gameLoop();
 }
+
+
 
 
 
@@ -100,10 +108,12 @@ window.addEventListener('keydown', (e) => {
 
             settingScreen.style.opacity = "0"
             gameSetting.style.opacity = "0"
-            let Enemies = new EnemyGenerator(mapSence, 5)
-            const hero = new MapHero(mapSence);
+            let E = new EnemyGenerator(mapSence, 5)
+            Enemies = E.init()
+
+            hero = new MapHero(mapSence);
             hero.initializeControls()
-            startGameLoop(hero)
+            startGameLoop()
             audio.play()
             audio.pause()
 
@@ -120,7 +130,6 @@ window.addEventListener('keydown', (e) => {
             title.innerHTML = "Game is Paused"
             instructions.innerHTML = "Press R to Resume"
 
-
         }
 
     }
@@ -130,13 +139,11 @@ window.addEventListener('keydown', (e) => {
             gameSetting.style.opacity = "0"
             // audio.play()
             gamePaused = false
-
+            startGameLoop()
 
         }
     }
 });
-
-
 
 let level1 = new mapClass()
 level1.drawMap(mapArray, 0.1)
