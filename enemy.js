@@ -204,7 +204,7 @@ export class EnemyGenerator {
         } while (mapArray[y][x] !== 1);
 
         const enemy = new Enemy(x * 32, y * 32, z);
-        enemy.element.className = `enemy_`
+        enemy.element.className = `enemy`
         this.enemies.push(enemy);
         this.map.appendChild(enemy.element);
 

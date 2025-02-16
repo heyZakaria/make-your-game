@@ -1,5 +1,5 @@
 import { mapClass, mapArray } from "./map.js";
-import { MapHero } from "./bomberman.js";
+import { diedhero, MapHero, heart, nbrOfKilled } from "./bomberman.js";
 import { EnemyGenerator } from "./enemy.js";
 
 export let numbreofenemy = 5
@@ -13,6 +13,7 @@ export const greenBlockImage = new Image
 export const enemymoveemage = new Image
 export const boombimage = new Image
 export const exploImg = new Image
+const heartimg = new Image
 
 tileImage.src = `./assets/tile.png`
 blockImage.src = `./assets/block.png`
@@ -20,6 +21,8 @@ greenBlockImage.src = `./assets/greenBlock.png`
 enemymoveemage.src = `./assets/enemy.png`
 boombimage.src = `./assets/bomb.png`
 exploImg.src = `./assets/3.png`
+
+heartimg.src = `./assets/heart.png`
 
 export const directions = {
     up: "ArrowUp",
@@ -84,6 +87,17 @@ export function SetEnemyCoords(x, y, e) {
     enemyCoords[e].y = y
 }
 
+
+function khamazat() {
+    // diedhero=false
+    let enemies = document.querySelectorAll(".enemy")
+
+    for (const e of enemies) {
+        e.remove()
+    }
+}
+
+
 let game = document.getElementById("game")
 let settingScreen = document.getElementById("settingScreen")
 let gameSetting = document.getElementById("gameSetting")
@@ -101,15 +115,21 @@ let audio = new Audio("./assets/playGame.mp3")
 let Enemies
 let hero
 let gameTime = 200
+let id = 0
+let heartcnt = 3
 
 export function startGameLoop() {
     let CountPerFrame = 0
+    let nbrheart = document.getElementById("nbrheart")
 
+    nbrheart.innerText = heartcnt
     let Time = document.getElementById("Time")
     Time.innerText = "Time" + " " + gameTime
 
     const gameLoop = () => {
         if (!gamePaused) {
+            let score = document.getElementById("score")
+            score.innerText = nbrOfKilled * 100
 
             hero.moveHero();
             CountPerFrame += 16.7
@@ -124,15 +144,28 @@ export function startGameLoop() {
                 e.move()
             }
 
-            window.requestAnimationFrame(gameLoop);
+            id = window.requestAnimationFrame(gameLoop);
         }
     };
     gameLoop();
 }
 
-
 window.addEventListener('keydown', (e) => {
-    if (e.code == "KeyP") {
+    if (e.code == "KeyP" || ((diedhero) && e.code == "KeyX")) {
+        if ((diedhero) && e.code == "KeyX") {
+            startGame = true
+            cancelAnimationFrame(id)
+            khamazat()
+
+
+            if (heartcnt == 1) {
+                window.location.href = 'gameover.html';
+            }
+
+            heartcnt -= 1
+            nbrheart.innerHTML = heartcnt
+
+        }
         if (startGame) {
 
             settingScreen.style.opacity = "0"
@@ -147,6 +180,7 @@ window.addEventListener('keydown', (e) => {
             audio.pause()
 
             startGame = false
+            // diedhero=false
             return
         }
 

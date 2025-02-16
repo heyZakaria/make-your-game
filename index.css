@@ -29,25 +29,16 @@ h1 {
 
 #Time,
 #Score,
-#Rwaa7 {
+#heart {
     display: flex;
     align-items: center;
     padding-left: 16px;
     font-weight: bold;
-}
-
-#Time {
     background-color: whitesmoke;
+
 }
 
-#Score {
-    background-color: whitesmoke;
-}
-
-#Rwaa7 {
-    background-color: whitesmoke;
-}
-
+ 
 img {
     height: inherit;
     width: inherit;

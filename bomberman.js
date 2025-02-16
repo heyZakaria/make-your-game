@@ -1,14 +1,19 @@
-import { blockImage, enemyCoords, gamePaused, numbreofenemy } from "./index.js";
+import { blockImage, enemyCoords, gamePaused, numbreofenemy ,} from "./index.js";
 import { mapArray, mapClass } from "./map.js";
 import { directions, keys, heroConfig, greenBlockImage, boombimage, exploImg } from "./index.js";
-let nbrOfKilled = 0
+export let heart=4
+export var nbrOfKilled =0
 let mapSence = document.getElementById("map")
 let findDoor = false
 let doorCoords = [-1, -1]
 let isBombed = false
+export let diedhero=false
 
 export let bombCoords = []
 
+const door = new Image()
+door.src = './assets/door.png';
+ 
 export function killEnemy(Xboomb, Yboomb, enemyCoords) {
 
     for (let i = 1; i <= 5; i++) {
@@ -17,9 +22,11 @@ export function killEnemy(Xboomb, Yboomb, enemyCoords) {
         let yGap = Math.abs(Yboomb - enemyCoords[i].y * 32)
 
         if ((xGap <= 40) && (yGap <= 40)) {
+            nbrOfKilled=nbrOfKilled+1
+            // console.log("nbrOfKilled",nbrOfKilled)
 
             enemyCoords[i].z = 1
-            nbrOfKilled++
+           
         }
     }
 }
@@ -41,7 +48,8 @@ function enemykillHero(enemyCoords, Xhero, Yhero) {
         let yGap = Math.abs(enemyCoords[i].y * 32 - Yhero)
 
         if ((xGap <= 30) && (yGap <= 30)) {
-
+          diedhero=true
+            heart-=1
             return true
         }
 
@@ -99,8 +107,11 @@ export class MapHero {
 
     initializeControls() {
 
+        diedhero=false
 
         document.addEventListener("keydown", (e) => {
+            console.log(this.gridX, "X");
+            console.log(this.gridY, "Y");
             if (gamePaused) {
                 return
             }
@@ -113,7 +124,12 @@ export class MapHero {
             }
 
             if (e.code === "Space" && !gamePaused) {
-                this.createBomb(this.gridX, this.gridY)
+                if (this.gridX>0 && this.gridY>0){
+                    this.createBomb(this.gridX, this.gridY)
+
+                } 
+                
+                
             }
         });
 
@@ -129,6 +145,8 @@ export class MapHero {
     }
 
     canMove(nextGridX, nextGridY) {
+
+        if (nextGridX === -1 || nextGridY === -1) return
 
         if ((mapArray[nextGridY][nextGridX] !== 1 && mapArray[nextGridY][nextGridX] !== 3) || (bombCoords[0] == nextGridX && bombCoords[1] == nextGridY)) {
             
@@ -176,12 +194,24 @@ export class MapHero {
     }
 
     moveHero() {
+
+        // console.log(this.gridX);
+        // console.log(this.gridY);
+        
+        if (enemykillHero(enemyCoords, this.pixelX, this.pixelY)) {
+             
+            this.currentDirection = directions.destroy;
+            this.element.remove()
+            this.gridX=-1
+            this.gridY=-1
+        }
+
         if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && nbrOfKilled == numbreofenemy) {
             console.log("weeeeeeee");
-            
-
-            let level1 = new mapClass
-            level1.drawMap(mapArray)
+            //adding youwin.html && css
+            mapSence.innerHTML="u win"
+            // let level1 = new mapClass
+            // level1.drawMap(mapArray)
         }
 
         if (!this.isMoving)
@@ -292,9 +322,10 @@ export class MapHero {
 
             if ((Math.random() < 0.3) && (findDoor == false)) {
 
-                brickBombed.style.background = 'purple';
+                // brickBombed.style.background = 'purple';
                 findDoor = true
                 doorCoords = [ybriks, xbriks]
+                brickBombed.style.backgroundImage = `url(${door.src})`
 
             } else {
                 brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
@@ -372,9 +403,6 @@ export class MapHero {
 
     }
     render() {
-        if (enemykillHero(enemyCoords, this.pixelX, this.pixelY)) {
-            this.currentDirection = directions.destroy;
-        }
 
         const curHeroDirection = this.heroImages[this.currentDirection];
         this.element.style.backgroundImage = `url(${curHeroDirection.src})`;
