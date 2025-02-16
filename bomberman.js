@@ -322,13 +322,25 @@ export class MapHero {
 
             if ((Math.random() < 0.3) && (findDoor == false)) {
 
-                // brickBombed.style.background = 'purple';
+                brickBombed.style.background = 'purple';
                 findDoor = true
                 doorCoords = [ybriks, xbriks]
-                brickBombed.style.backgroundImage = `url(${door.src})`
 
             } else {
-                brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`
+                let frameIndex = 0;
+                const animationBricks = setInterval(() => {
+                    if (frameIndex < 4) {
+                        console.log("FRAME:", frameIndex);
+                        
+                        brickBombed.style.backgroundImage = `url(${blockImage.src})`;
+                        brickBombed.style.backgroundPosition = `-${frameIndex * 32}px 0px`;
+                        frameIndex++;
+                    } else {
+                        clearInterval(animationBricks);
+                        brickBombed.style.backgroundImage = `url(${greenBlockImage.src})`;
+                    }
+                }, 100);
+
 
             }
 
@@ -381,7 +393,7 @@ export class MapHero {
             const exploX = gridX + dir.dx;
             const exploY = gridY + dir.dy;
 
-            if (mapArray[exploY] && mapArray[exploY][exploX]) {
+            if (mapArray[exploY] && mapArray[exploY][exploX] && mapArray[exploY][exploX] != 2) {
                 this.createImgExplosion(exploX, exploY);
             }
         });

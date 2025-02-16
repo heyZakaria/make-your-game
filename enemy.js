@@ -15,7 +15,8 @@ export class Enemy {
         this.pixelY = this.gridY * 32;
         this.element = this.createEnemyono();
         this.direction = this.getRandomDirection();
-        this.moveSpeed = 0.8;
+        this.frameEnemyIndex = 0
+        this.moveSpeed = 1;
         this.moveInterval = null;
         this.isMoving = false;
 
@@ -31,6 +32,13 @@ export class Enemy {
         enemy.style.transform = `translate3d(${this.pixelX}px, ${this.pixelY}px, 0px)`;
         return enemy;
     }
+
+    animationEnemy() {
+        this.frameEnemyIndex = (this.frameEnemyIndex + 1) % 6
+
+        this.element.style.backgroundPosition = `-${this.frameEnemyIndex * 32}px ${0}px`
+    }
+
 
     getRandomDirection() {
         const validDirections = this.getValidDirections();
@@ -91,6 +99,8 @@ export class Enemy {
 
         let nextGridX = this.gridX;
         let nextGridY = this.gridY;
+
+        this.animationEnemy()
 
         // Calculate target grid position based on direction
 
