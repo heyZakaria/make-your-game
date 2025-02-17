@@ -147,6 +147,27 @@ export function startGameLoop() {
             for (const e of Enemies) {
                 e.move()
             }
+            let x = document.getElementById("hero")
+            if (x == null) {
+                startGame = true
+                cancelAnimationFrame(id)
+                gameTime = 200
+
+                khamazat()
+
+                if (heartLeft == 1) {
+                    alert("GAME OVER")
+                    window.location.href = 'index.html'
+                    return
+                }
+                alert("Dead, Click P to Continue ")
+                heartLeft -= 1
+                numOfHeart.innerHTML = heartLeft
+                return
+
+
+            }
+
 
             id = window.requestAnimationFrame(gameLoop);
         }
@@ -155,24 +176,8 @@ export function startGameLoop() {
 }
 
 window.addEventListener('keydown', (e) => {
-    if (e.code == "KeyP" || ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp"))) {
-        if ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp")) {
-            startGame = true
-            cancelAnimationFrame(id)
-            gameTime = 200
+    if (e.code == "KeyP" ) {
 
-            khamazat()
-
-            if (heartLeft == 1) {
-                alert("GAME OVER")
-                window.location.href = 'index.html'
-            }
-
-            heartLeft -= 1
-            numOfHeart.innerHTML = heartLeft
-            return
-
-        }
         if (startGame) {
             settingScreen.classList.remove("animate");
             settingScreen.style.opacity = "0"

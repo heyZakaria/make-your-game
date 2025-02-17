@@ -106,7 +106,7 @@ export class MapHero {
         this.element.style.height = `${heroConfig.tileSize}px`;
         this.element.style.position = "absolute";
         this.element.style.overflow = "hidden";
-        this.element.className = "hero"
+        this.element.id = "hero"
 
         mapSence.appendChild(this.element);
 
@@ -209,8 +209,8 @@ export class MapHero {
             setTimeout(() => {
                 this.element.remove()
             }, 200);
-            this.gridX = -Math.random()
-            this.gridY = -Math.random()
+            this.gridX = -1
+            this.gridY = -1
         }
 
         if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && nbrOfKilled == numbreofenemy) {
@@ -281,8 +281,8 @@ export class MapHero {
             this.boombEnemy(Xboomb, Yboomb)
             this.boombHero(xBombGrid, yBombGrid)
 
-            bombCoords[0] = -Math.random()
-            bombCoords[1] = -Math.random()
+            bombCoords[0] = -1
+            bombCoords[1] = -1
             bomb.remove();
             isBombed = false
         }, 2000);
@@ -399,8 +399,8 @@ export class MapHero {
                 setTimeout(() => {
                     this.element.remove()
                 }, 200);
-                this.gridX = -Math.random()
-                this.gridY = -Math.random()
+                this.gridX = -1
+                this.gridY = -1
             }
         })
     }
