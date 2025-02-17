@@ -1,6 +1,6 @@
 import { mapArray } from "./map.js";
 import { SetEnemyCoords, killTheEnemy, enemyCoords, gamePaused } from "./index.js";
-import { bombCoords } from "./bomberman.js";
+import { bombCoords, diedhero } from "./bomberman.js";
 
 
 
@@ -91,13 +91,13 @@ export class Enemy {
 
             // Do the animation then remove it 
             this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
-           ///
+            ///
             setTimeout(() => {
                 //////////////////////////////////
                 //// Enemy is not removed
                 /////////////////////////////////
                 this.element.remove()
-                
+
             }, 2000);
 
         }
@@ -161,14 +161,18 @@ export class Enemy {
             }
 
             this.update();
-
+           
 
             if (arreveToTarget) {
                 this.isMoving = false;
             } else {
 
-                requestAnimationFrame(moveToNext)
+                var id = requestAnimationFrame(moveToNext)
 
+            }
+            if (diedhero) {
+             
+                cancelAnimationFrame(id)
             }
         }
         moveToNext()

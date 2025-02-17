@@ -1,6 +1,6 @@
 import { blockImage, enemyCoords, gamePaused, numbreofenemy, } from "./index.js";
 import { mapArray, mapClass } from "./map.js";
-import { directions, keys, heroConfig, greenBlockImage, boombimage, exploImg } from "./index.js";
+import { directions, keys, heroConfig, greenBlockImage, boombimage, exploImg, settingScreen, gameSetting, instructions, title } from "./index.js";
 export let heart = 4
 export var nbrOfKilled = 0
 let mapSence = document.getElementById("map")
@@ -156,7 +156,7 @@ export class MapHero {
 
         if (nextGridX === -1 || nextGridY === -1) return
 
-        if ((mapArray[nextGridY][nextGridX] !== 1 && mapArray[nextGridY][nextGridX] !== 3) || (bombCoords[0] == nextGridX && bombCoords[1] == nextGridY)) {
+        if ((mapArray[nextGridY][nextGridX] !== 1 && mapArray[nextGridY][nextGridX] !== 3) || (bombCoords[0] === nextGridX && bombCoords[1] === nextGridY)) {
 
             return false;
         } else {
@@ -370,7 +370,6 @@ export class MapHero {
     boombHero(Xboomb, Yboomb) {
         let heroX = this.gridX
         let heroY = this.gridY
-
         if (killHero(Xboomb, heroX, Yboomb, heroY)) {
             this.currentDirection = directions.destroy;
             diedhero = true
@@ -381,7 +380,13 @@ export class MapHero {
             this.gridX = -1
             this.gridY = -1
         }
-
+        if (diedhero) {
+            
+            settingScreen.style.opacity = ".1"
+            gameSetting.style.opacity = ".5"
+            title.innerHTML = "You are Dead "
+            instructions.innerHTML = "Click Arrow to continue"
+        }
         const explosionDir = [
             { dx: 0, dy: -1 },
             { dx: 0, dy: 1 },
@@ -435,7 +440,7 @@ export class MapHero {
         explo.style.backgroundImage = `url(${exploImg.src})`
         explo.style.transform = `translate3d(${gridX * heroConfig.tileSize}px, ${gridY * heroConfig.tileSize}px, 0px)`;
         mapSence.appendChild(explo);
-        
+
         setTimeout(() => {
             explo.remove();
         }, 200);
@@ -450,5 +455,5 @@ export class MapHero {
         this.element.style.transform = `translate3d(${this.pixelX}px, ${this.pixelY}px, 2px)`;
     }
 
-} 
+}
 

@@ -81,6 +81,8 @@ img {
     animation: mymove 5s infinite;
 }
 
+
+
 @keyframes mymove {
     10% {
         opacity: .5;

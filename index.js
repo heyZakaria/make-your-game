@@ -99,12 +99,12 @@ function khamazat() {
 
 
 let game = document.getElementById("game")
-let settingScreen = document.getElementById("settingScreen")
-let gameSetting = document.getElementById("gameSetting")
+export let settingScreen = document.getElementById("settingScreen")
+export let gameSetting = document.getElementById("gameSetting")
 game.insertBefore(settingScreen, game.firstChild)
 
-let instructions = document.getElementById("instructions")
-let title = document.getElementById("title")
+export let instructions = document.getElementById("instructions")
+export let title = document.getElementById("title")
 //let gameAudio = document.getElementById("gameAudio")
 export let startGame = true
 export let gamePaused = false
@@ -147,7 +147,14 @@ export function startGameLoop() {
             for (const e of Enemies) {
                 e.move()
             }
-
+            if (diedhero) {
+                
+                settingScreen.style.opacity = ".1"
+                gameSetting.style.opacity = ".5"
+                title.innerHTML = "You are Dead "
+                instructions.innerHTML = "Click Arrow to continue"
+                cancelAnimationFrame(id)
+            }
             id = window.requestAnimationFrame(gameLoop);
         }
     };
@@ -161,6 +168,7 @@ window.addEventListener('keydown', (e) => {
             cancelAnimationFrame(id)
             gameTime = 200
 
+
             khamazat()
 
             if (heartLeft == 1) {
@@ -169,8 +177,7 @@ window.addEventListener('keydown', (e) => {
             }
 
             heartLeft -= 1
-            numOfHeart.innerHTML = heartLeft
-            return
+            numOfHeart.innerText = heartLeft
 
         }
         if (startGame) {
@@ -191,7 +198,7 @@ window.addEventListener('keydown', (e) => {
             return
         }
 
-        if (!gamePaused && !startGame) {
+        if (!gamePaused && !startGame && !diedhero) {
 
             audio.pause()
             gamePaused = true
