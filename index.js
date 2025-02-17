@@ -116,20 +116,18 @@ let Enemies
 let hero
 let gameTime = 200
 let id = 0
-let heartcnt = 3
+let heartLeft = 3
 
 export function startGameLoop() {
     let CountPerFrame = 0
-    let nbrheart = document.getElementById("nbrheart")
+    let numOfHeart = document.getElementById("numOfHeart")
 
-    nbrheart.innerText = heartcnt
+    numOfHeart.innerText = heartLeft
     let Time = document.getElementById("Time")
     Time.innerText = "Time" + " " + gameTime
 
     const gameLoop = () => {
         if (!gamePaused) {
-            let score = document.getElementById("score")
-            score.innerText = nbrOfKilled * 100
 
             hero.moveHero();
             CountPerFrame += 16.7
@@ -151,19 +149,20 @@ export function startGameLoop() {
 }
 
 window.addEventListener('keydown', (e) => {
-    if (e.code == "KeyP" || ((diedhero) && e.code == "KeyX")) {
-        if ((diedhero) && e.code == "KeyX") {
+    if (e.code == "KeyP" || ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp"))) {
+        if ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp")) {
             startGame = true
             cancelAnimationFrame(id)
             khamazat()
 
 
-            if (heartcnt == 1) {
-                window.location.href = 'gameover.html';
+            if (heartLeft == 1) {
+                alert("GAME OVER")
+                window.location.href = 'index.html'
             }
 
-            heartcnt -= 1
-            nbrheart.innerHTML = heartcnt
+            heartLeft -= 1
+            numOfHeart.innerHTML = heartLeft
 
         }
         if (startGame) {

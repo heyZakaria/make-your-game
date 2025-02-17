@@ -1,5 +1,6 @@
 * {
     margin: 0;
+    
 }
 
 body{
@@ -72,3 +73,36 @@ img {
     padding: 2%;
 
 }
+
+
+
+
+@media (max-width: 576px) { 
+    * {
+        zoom: 0.9;
+    }
+ }
+
+ @media (max-width: 768px) { 
+    * {
+        zoom: 2;
+    }
+ }
+
+ @media (max-width: 992px) { 
+    * {
+        zoom: 0.9;
+    }
+ }
+
+ @media (max-width: 1200px) { 
+    * {
+        zoom: 2;
+    }
+ }
+
+ @media (max-width: 1400px) { 
+    * {
+        zoom: 0.9;
+    }
+ }
