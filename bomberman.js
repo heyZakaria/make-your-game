@@ -372,6 +372,13 @@ export class MapHero {
 
         if (killHero(Xboomb, heroX, Yboomb, heroY)) {
             this.currentDirection = directions.destroy;
+            diedhero = true
+
+            setTimeout(() => {
+                this.element.remove()
+            }, 300);
+            this.gridX = -1
+            this.gridY = -1
         }
 
         const explosionDir = [

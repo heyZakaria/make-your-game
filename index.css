@@ -1,11 +1,12 @@
 * {
     margin: 0;
-    
+
 }
 
-body{
+body {
     background-color: darkslategrey;
 }
+
 h1 {
     color: white;
 }
@@ -20,7 +21,6 @@ h1 {
 }
 
 #gameBar {
-    height: 50px;
     width: inherit;
     background-color: silver;
     display: grid;
@@ -36,10 +36,11 @@ h1 {
     padding-left: 16px;
     font-weight: bold;
     background-color: whitesmoke;
+    font-size: large ;
 
 }
 
- 
+
 img {
     height: inherit;
     width: inherit;
@@ -71,38 +72,45 @@ img {
     height: 40%;
     z-index: 3;
     padding: 2%;
+    /* 
+        do ease animation
+    */
+    animation: mymove 5s infinite;
+}
 
+@keyframes mymove {
+    20% {opacity: .5;}
+  }
+
+@media (min-width: 340px) {
+    #game {
+        zoom: 0.5;
+    }
+    
+}
+
+@media (min-width: 576px) {
+    #game {
+        zoom: 0.7;
+    }
+}
+
+@media (min-width: 768px) {
+    #game {
+        zoom: .8;
+    }
+}
+
+@media (min-width: 992px) {
+    #game {
+        zoom: .9;
+    }
 }
 
 
 
-
-@media (max-width: 576px) { 
-    * {
-        zoom: 0.9;
+@media (min-width: 1400px) {
+    #game {
+        zoom: 1;
     }
- }
-
- @media (max-width: 768px) { 
-    * {
-        zoom: 2;
-    }
- }
-
- @media (max-width: 992px) { 
-    * {
-        zoom: 0.9;
-    }
- }
-
- @media (max-width: 1200px) { 
-    * {
-        zoom: 2;
-    }
- }
-
- @media (max-width: 1400px) { 
-    * {
-        zoom: 0.9;
-    }
- }
+}

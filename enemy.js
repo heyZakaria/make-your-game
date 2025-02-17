@@ -36,9 +36,10 @@ export class Enemy {
 
     animationEnemy() {
         console.log("animation");
-        
+
         this.frameEnemyIndex = (this.frameEnemyIndex + 1) % 6
         this.element.style.backgroundPosition = `-${this.frameEnemyIndex * 32}px ${0}px`
+
     }
 
     getRandomDirection() {
@@ -90,8 +91,12 @@ export class Enemy {
             enemyCoords[this.nmr].z = 0
 
             // Do the animation then remove it 
-            // this.element.remove()
             this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
+            setTimeout(() => {
+                this.element.remove()
+            }, 400);
+            
+            // console.log("MAAAT");
 
         }
 

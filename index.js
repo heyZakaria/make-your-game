@@ -137,6 +137,12 @@ export function startGameLoop() {
                 CountPerFrame = 0
             }
             hero.render();
+            if (gameTime <= 0) {
+                alert("GAME OVER")
+                cancelAnimationFrame(id)
+                gameTime = 1
+                window.location.href = 'index.html'
+            }
 
             for (const e of Enemies) {
                 e.move()
@@ -154,7 +160,6 @@ window.addEventListener('keydown', (e) => {
             startGame = true
             cancelAnimationFrame(id)
             khamazat()
-
 
             if (heartLeft == 1) {
                 alert("GAME OVER")
