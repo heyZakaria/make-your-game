@@ -159,6 +159,8 @@ window.addEventListener('keydown', (e) => {
         if ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp")) {
             startGame = true
             cancelAnimationFrame(id)
+            gameTime = 200
+
             khamazat()
 
             if (heartLeft == 1) {
@@ -168,10 +170,11 @@ window.addEventListener('keydown', (e) => {
 
             heartLeft -= 1
             numOfHeart.innerHTML = heartLeft
+            return
 
         }
         if (startGame) {
-
+            settingScreen.classList.remove("animate");
             settingScreen.style.opacity = "0"
             gameSetting.style.opacity = "0"
             let E = new EnemyGenerator(mapSence, 5)

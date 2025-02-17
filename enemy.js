@@ -35,7 +35,6 @@ export class Enemy {
     }
 
     animationEnemy() {
-        console.log("animation");
 
         this.frameEnemyIndex = (this.frameEnemyIndex + 1) % 6
         this.element.style.backgroundPosition = `-${this.frameEnemyIndex * 32}px ${0}px`
@@ -92,11 +91,14 @@ export class Enemy {
 
             // Do the animation then remove it 
             this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
+           ///
             setTimeout(() => {
+                //////////////////////////////////
+                //// Enemy is not removed
+                /////////////////////////////////
                 this.element.remove()
-            }, 400);
-            
-            // console.log("MAAAT");
+                
+            }, 2000);
 
         }
 

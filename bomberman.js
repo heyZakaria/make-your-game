@@ -25,7 +25,7 @@ export function killEnemy(Xboomb, Yboomb, enemyCoords) {
         let xGap = Math.abs(Xboomb - enemyCoords[i].x * 32)
         let yGap = Math.abs(Yboomb - enemyCoords[i].y * 32)
 
-        if ((xGap <= 40) && (yGap <= 40)) {
+        if ((xGap <= 45) && (yGap <= 45)) {
             nbrOfKilled = nbrOfKilled + 1
 
             enemyCoords[i].z = 1
@@ -61,6 +61,10 @@ function enemykillHero(enemyCoords, Xhero, Yhero) {
     }
 
 }
+
+
+
+
 
 export class MapHero {
 
@@ -115,8 +119,7 @@ export class MapHero {
         diedhero = false
 
         document.addEventListener("keydown", (e) => {
-            // console.log(this.gridX, "X");
-            // console.log(this.gridY, "Y");
+
             if (gamePaused) {
                 return
             }
@@ -200,17 +203,14 @@ export class MapHero {
 
     moveHero() {
 
-        // console.log(this.gridX);
-        // console.log(this.gridY);
-
         if (enemykillHero(enemyCoords, this.pixelX, this.pixelY)) {
 
             this.currentDirection = directions.destroy;
             setTimeout(() => {
                 this.element.remove()
-            }, 300);
-            this.gridX = -1
-            this.gridY = -1
+            }, 200);
+            this.gridX = -Math.random()
+            this.gridY = -Math.random()
         }
 
         if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && nbrOfKilled == numbreofenemy) {
@@ -281,11 +281,11 @@ export class MapHero {
             this.boombEnemy(Xboomb, Yboomb)
             this.boombHero(xBombGrid, yBombGrid)
 
-            bombCoords[0] = -1
-            bombCoords[1] = -1
+            bombCoords[0] = -Math.random()
+            bombCoords[1] = -Math.random()
             bomb.remove();
             isBombed = false
-        }, 3000);
+        }, 2000);
 
 
     }
@@ -303,6 +303,7 @@ export class MapHero {
             Score.innerText = XP
             bombIt()
         }
+
         if (mapArray[Yboomb][Xboomb + 1] === 2) {
             // Check Right
             xbriks = Yboomb
@@ -311,6 +312,7 @@ export class MapHero {
             Score.innerText = XP
             bombIt()
         }
+
         if (mapArray[Yboomb - 1][Xboomb] === 2) {
             // Check UP
             xbriks = Yboomb - 1
@@ -345,7 +347,6 @@ export class MapHero {
                 let frameIndex = 0;
                 const animationBricks = setInterval(() => {
                     if (frameIndex < 4) {
-                        console.log("FRAME:", frameIndex);
 
                         brickBombed.style.backgroundImage = `url(${blockImage.src})`;
                         brickBombed.style.backgroundPosition = `-${frameIndex * 32}px 0px`;
@@ -376,7 +377,7 @@ export class MapHero {
 
             setTimeout(() => {
                 this.element.remove()
-            }, 300);
+            }, 200);
             this.gridX = -1
             this.gridY = -1
         }
@@ -397,9 +398,9 @@ export class MapHero {
 
                 setTimeout(() => {
                     this.element.remove()
-                }, 300);
-                this.gridX = -1
-                this.gridY = -1
+                }, 200);
+                this.gridX = -Math.random()
+                this.gridY = -Math.random()
             }
         })
     }
@@ -434,10 +435,10 @@ export class MapHero {
         explo.style.backgroundImage = `url(${exploImg.src})`
         explo.style.transform = `translate3d(${gridX * heroConfig.tileSize}px, ${gridY * heroConfig.tileSize}px, 0px)`;
         mapSence.appendChild(explo);
-
+        
         setTimeout(() => {
             explo.remove();
-        }, 300);
+        }, 200);
 
 
     }
@@ -449,4 +450,5 @@ export class MapHero {
         this.element.style.transform = `translate3d(${this.pixelX}px, ${this.pixelY}px, 2px)`;
     }
 
-}
+} 
+

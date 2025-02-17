@@ -36,7 +36,7 @@ h1 {
     padding-left: 16px;
     font-weight: bold;
     background-color: whitesmoke;
-    font-size: large ;
+    font-size: large;
 
 }
 
@@ -75,18 +75,23 @@ img {
     /* 
         do ease animation
     */
+}
+
+.animate {
     animation: mymove 5s infinite;
 }
 
 @keyframes mymove {
-    20% {opacity: .5;}
-  }
+    10% {
+        opacity: .5;
+    }
+}
 
 @media (min-width: 340px) {
     #game {
         zoom: 0.5;
     }
-    
+
 }
 
 @media (min-width: 576px) {
