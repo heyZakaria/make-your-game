@@ -102,7 +102,8 @@ export class Enemy {
                 //////////////////////////////////
                 //// Enemy is not removed
                 /////////////////////////////////
-                this.element.remove()
+                // this.element.remove()
+                this.element.style.opacity = 0
 
             }, 1100);
         }
