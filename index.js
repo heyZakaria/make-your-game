@@ -2,7 +2,7 @@ import { mapClass, mapArray } from "./map.js";
 import { diedhero, MapHero, heart, nbrOfKilled } from "./bomberman.js";
 import { EnemyGenerator } from "./enemy.js";
 
-export let numbreofenemy = 1
+export let numbreofenemy = 5
 // When the block is destroyed and becomes gress, The Hero go below the gress
 // Maybe because we draw the map in index.js and bomberman.js
 let mapSence = document.getElementById("map")
@@ -165,11 +165,33 @@ export function startGameLoop() {
     };
     gameLoop();
 }
-window.addEventListener('keydown', (e) => {
+
+window.addEventListener('keyup', (e) => {
     if ((e.code == "KeyR" && gamePaused)) {
         window.location.href = 'index.html'
     }
     if (e.code == "KeyP" || ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp"))) {
+        if (startGame) {
+
+            settingScreen.classList.remove("animate");
+            settingScreen.style.opacity = "0"
+            gameSetting.style.opacity = "0"
+            startGame = false
+
+            hero = new MapHero(mapSence);
+            let E = new EnemyGenerator(mapSence, numbreofenemy)
+            hero.initializeControls()
+            Enemies = E.init()
+
+            startGameLoop()
+
+            //audio.play()
+            // audio.pause()
+
+            // diedhero=false
+            return
+        }
+
         if ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp")) {
             startGame = true
             cancelAnimationFrame(id)
@@ -188,25 +210,6 @@ window.addEventListener('keydown', (e) => {
 
         }
 
-        if (startGame) {
-
-            settingScreen.classList.remove("animate");
-            settingScreen.style.opacity = "0"
-            gameSetting.style.opacity = "0"
-            let E = new EnemyGenerator(mapSence, numbreofenemy)
-            Enemies = E.init()
-
-            hero = new MapHero(mapSence);
-            hero.initializeControls()
-            startGameLoop()
-            audio.play()
-            audio.pause()
-
-            startGame = false
-            // diedhero=false
-            return
-        }
-
         if (!gamePaused && !startGame && !diedhero) {
 
             audio.pause()
@@ -215,10 +218,8 @@ window.addEventListener('keydown', (e) => {
             gameSetting.style.opacity = "1"
             settingScreen.classList.add("animate");
             title.innerHTML = "Game is Paused"
-            instructions.innerHTML = "Press C to Continue or R to Restart "
-
+            instructions.innerHTML = "Press C to Continue or R to Restart"
         }
-
     }
     if (e.code == "KeyC") {
         if (gamePaused) {
@@ -228,7 +229,6 @@ window.addEventListener('keydown', (e) => {
             // audio.play()
             gamePaused = false
             startGameLoop()
-
         }
     }
 });

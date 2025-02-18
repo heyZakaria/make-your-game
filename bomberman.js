@@ -20,8 +20,12 @@ door.src = './assets/door.png';
 
 export function killEnemy(Xboomb, Yboomb, enemyCoords) {
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= numbreofenemy; i++) {
+        console.log(enemyCoords[i], "Weeeeeeee");
 
+        if (enemyCoords[i] == undefined) {
+            continue
+        }
         let xGap = Math.abs(Xboomb - enemyCoords[i].x * 32)
         let yGap = Math.abs(Yboomb - enemyCoords[i].y * 32)
 
@@ -273,9 +277,9 @@ export class MapHero {
             this.boombEnemy(Xboomb, Yboomb)
             this.boombHero(xBombGrid, yBombGrid)
 
-            bomb.remove();
             bombCoords[0] = -1
             bombCoords[1] = -1
+            bomb.remove();
             isBombed = false
         }, 2000);
 
