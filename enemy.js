@@ -84,23 +84,29 @@ export class Enemy {
 
     move() {
 
-        SetEnemyCoords(this.pixelX / 32, this.pixelY / 32, this.nmr)
+        if (enemyCoords[this.nmr] != undefined) {
+            SetEnemyCoords(this.pixelX / 32, this.pixelY / 32, this.nmr)
+        } else {
+            return
+        }
 
         if (enemyCoords[this.nmr].z == 1) {
-            enemyCoords[this.nmr].z = 0
+
 
             // Do the animation then remove it 
             this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
             ///
+            delete enemyCoords[this.nmr]
+
             setTimeout(() => {
                 //////////////////////////////////
                 //// Enemy is not removed
                 /////////////////////////////////
                 this.element.remove()
 
-            }, 2000);
-
+            }, 1100);
         }
+
 
 
         if (this.isMoving) return;
@@ -161,7 +167,7 @@ export class Enemy {
             }
 
             this.update();
-           
+
 
             if (arreveToTarget) {
                 this.isMoving = false;
@@ -171,7 +177,7 @@ export class Enemy {
 
             }
             if (diedhero) {
-             
+
                 cancelAnimationFrame(id)
             }
         }

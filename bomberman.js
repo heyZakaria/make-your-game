@@ -29,6 +29,7 @@ export function killEnemy(Xboomb, Yboomb, enemyCoords) {
             nbrOfKilled = nbrOfKilled + 1
 
             enemyCoords[i].z = 1
+            enemyCoords[i].w = 100
             XP += 100
             Score.innerText = XP
 
@@ -46,11 +47,9 @@ function killHero(Xboomb, Xhero, Yboomb, Yhero) {
 }
 
 function enemykillHero(enemyCoords, Xhero, Yhero) {
-
-    for (let i = 1; i <= 5; i++) {
-
-        let xGap = Math.abs(enemyCoords[i].x * 32 - Xhero)
-        let yGap = Math.abs(enemyCoords[i].y * 32 - Yhero)
+    for (const [key, val] of Object.entries(enemyCoords)) {
+        let xGap = Math.abs(val.x * 32 - Xhero)
+        let yGap = Math.abs(val.y * 32 - Yhero)
 
         if ((xGap <= 30) && (yGap <= 30)) {
             diedhero = true
@@ -59,12 +58,7 @@ function enemykillHero(enemyCoords, Xhero, Yhero) {
         }
 
     }
-
 }
-
-
-
-
 
 export class MapHero {
 
@@ -136,8 +130,6 @@ export class MapHero {
                     this.createBomb(this.gridX, this.gridY)
 
                 }
-
-
             }
         });
 
@@ -215,7 +207,7 @@ export class MapHero {
 
         if (this.gridX == doorCoords[0] && this.gridY == doorCoords[1] && nbrOfKilled == numbreofenemy) {
 
-            alert("GAME OVER")
+            alert("You Win")
             window.location.href = 'index.html'
 
         }
@@ -281,9 +273,9 @@ export class MapHero {
             this.boombEnemy(Xboomb, Yboomb)
             this.boombHero(xBombGrid, yBombGrid)
 
-            bombCoords[0] = -Math.random()
-            bombCoords[1] = -Math.random()
             bomb.remove();
+            bombCoords[0] = -1
+            bombCoords[1] = -1
             isBombed = false
         }, 2000);
 
@@ -377,11 +369,11 @@ export class MapHero {
             setTimeout(() => {
                 this.element.remove()
             }, 200);
-            this.gridX = -1
-            this.gridY = -1
+            this.gridX = -Math.random()
+            this.gridY = -Math.random()
         }
         if (diedhero) {
-            
+
             settingScreen.style.opacity = ".1"
             gameSetting.style.opacity = ".5"
             title.innerHTML = "You are Dead "
