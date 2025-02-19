@@ -1,6 +1,6 @@
 import { mapArray } from "./map.js";
-import { SetEnemyCoords, killTheEnemy, enemyCoords, gamePaused } from "./index.js";
-import { bombCoords, diedhero } from "./bomberman.js";
+import { SetEnemyCoords, enemyCoords, gamePaused, numbreofenemy } from "./index.js";
+import { bombCoords, diedhero, nbrOfKilled } from "./bomberman.js";
 
 
 
@@ -92,10 +92,9 @@ export class Enemy {
 
         if (enemyCoords[this.nmr].z == 1) {
 
-
             // Do the animation then remove it 
             this.element.style.backgroundImage = `url(${"./assets/destroy_enemy.png"})`
-            ///
+
             delete enemyCoords[this.nmr]
 
             setTimeout(() => {
@@ -107,8 +106,6 @@ export class Enemy {
 
             }, 1100);
         }
-
-
 
         if (this.isMoving) return;
 
@@ -217,12 +214,14 @@ export class EnemyGenerator {
 
     init() {
         let x = []
-        for (let i = 0; i < this.numberOfEnemies; i++) {
-            x.push(this.createEnemy(i + 1))
+        for (let i = 1; i <= this.numberOfEnemies; i++) {
+            x.push(this.createEnemy(i))
         }
-        return x
+        console.log(x, "========");
 
+        return x
     }
+
     //as always grid then pixel operation >>>> *32
     createEnemy(z) {
         let x, y;

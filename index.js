@@ -48,12 +48,6 @@ export const heroConfig = {
 
 
 export let enemyCoords = {
-    5: {
-        x: -1,
-        y: -1,
-        w: 0,
-        z: 0
-    },
     1: {
         x: -1,
         y: -1,
@@ -77,9 +71,14 @@ export let enemyCoords = {
         y: -1,
         w: 0,
         z: 0
+    },
+    5: {
+        x: -1,
+        y: -1,
+        w: 0,
+        z: 0
     }
 }
-export let killTheEnemy = false
 
 export function SetEnemyCoords(x, y, e) {
 
@@ -114,8 +113,8 @@ let audio = new Audio("./assets/playGame.mp3")
 let Enemies
 let hero
 let gameTime = 200
-let id = 0
-let heartLeft = 3
+let id
+let heartLeft = 20
 
 export function startGameLoop() {
     let CountPerFrame = 0
@@ -155,8 +154,8 @@ export function startGameLoop() {
                     title.innerHTML = "Game Over"
 
                 } else {
-                    title.innerHTML = "You are Dead "
-                    instructions.innerHTML = "Click Arrow to continue"
+                    title.innerHTML = "You are Dead"
+                    instructions.innerHTML = "Click D to continue"
                     cancelAnimationFrame(id)
                 }
             }
@@ -166,38 +165,17 @@ export function startGameLoop() {
     gameLoop();
 }
 
-window.addEventListener('keyup', (e) => {
+window.addEventListener('keydown', (e) => {
     if ((e.code == "KeyR" && gamePaused)) {
         window.location.href = 'index.html'
     }
-    if (e.code == "KeyP" || ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp"))) {
-        if (startGame) {
+    if (e.code == "KeyP" || ((diedhero) && (e.code == "KeyD"))) {
 
-            settingScreen.classList.remove("animate");
-            settingScreen.style.opacity = "0"
-            gameSetting.style.opacity = "0"
-            startGame = false
 
-            hero = new MapHero(mapSence);
-            let E = new EnemyGenerator(mapSence, numbreofenemy)
-            hero.initializeControls()
-            Enemies = E.init()
-
-            startGameLoop()
-
-            //audio.play()
-            // audio.pause()
-
-            // diedhero=false
-            return
-        }
-
-        if ((diedhero) && (e.code == "ArrowLeft" || e.code == "ArrowDown" || e.code == "ArrowRight" || e.code == "ArrowUp")) {
+        if ((diedhero) && (e.code == "KeyD")) {
             startGame = true
             cancelAnimationFrame(id)
             gameTime = 200
-
-
             khamazat()
 
             if (heartLeft == 1) {
@@ -207,7 +185,28 @@ window.addEventListener('keyup', (e) => {
 
             heartLeft -= 1
             numOfHeart.innerText = heartLeft
+        }
 
+        if (startGame) {
+
+            settingScreen.classList.remove("animate");
+            settingScreen.style.opacity = "0"
+            gameSetting.style.opacity = "0"
+            startGame = false
+
+            hero = new MapHero(mapSence);
+            hero.initializeControls()
+            
+            let E = new EnemyGenerator(mapSence, numbreofenemy - nbrOfKilled)
+            Enemies = E.init()
+
+            startGameLoop()
+
+            //audio.play()
+            // audio.pause()
+
+            // diedhero=false
+            return
         }
 
         if (!gamePaused && !startGame && !diedhero) {
