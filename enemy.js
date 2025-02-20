@@ -98,9 +98,7 @@ export class Enemy {
             delete enemyCoords[this.nmr]
 
             setTimeout(() => {
-                //////////////////////////////////
-                //// Enemy is not removed
-                /////////////////////////////////
+               
                 // this.element.remove()
                 this.element.style.opacity = 0
 
@@ -193,7 +191,6 @@ export class Enemy {
             if (!this.isMoving) {
                 this.direction = this.getRandomDirection();
             }
-            // }, Math.random() * 2000 + 1000);
         }, 500);
 
         this.moveInterval = setInterval(() => {
@@ -214,10 +211,12 @@ export class EnemyGenerator {
 
     init() {
         let x = []
-        for (let i = 1; i <= this.numberOfEnemies; i++) {
-            x.push(this.createEnemy(i))
+        for (let i = 1; i <= 5; i++) {
+            
+            if (enemyCoords[i] != undefined) {
+                x.push(this.createEnemy(i))
+            }
         }
-        console.log(x, "========");
 
         return x
     }

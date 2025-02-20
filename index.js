@@ -100,21 +100,23 @@ function khamazat() {
 let game = document.getElementById("game")
 export let settingScreen = document.getElementById("settingScreen")
 export let gameSetting = document.getElementById("gameSetting")
+settingScreen.classList.add("animate");
+
 game.insertBefore(settingScreen, game.firstChild)
 
 export let instructions = document.getElementById("instructions")
 export let title = document.getElementById("title")
-//let gameAudio = document.getElementById("gameAudio")
+// let gameAudio = document.getElementById("gameAudio")
 export let startGame = true
 export let gamePaused = false
 
 
-let audio = new Audio("./assets/playGame.mp3")
+// let audio = new Audio("./assets/playGame.mp3")
 let Enemies
 let hero
 let gameTime = 200
 let id
-let heartLeft = 20
+let heartLeft = 3
 
 export function startGameLoop() {
     let CountPerFrame = 0
@@ -145,8 +147,8 @@ export function startGameLoop() {
             for (const e of Enemies) {
                 e.move()
             }
-            if (diedhero) {
 
+            if (diedhero) {
                 settingScreen.style.opacity = ".1"
                 gameSetting.style.opacity = ".5"
                 settingScreen.classList.remove("animate");
@@ -199,10 +201,11 @@ window.addEventListener('keydown', (e) => {
             
             let E = new EnemyGenerator(mapSence, numbreofenemy - nbrOfKilled)
             Enemies = E.init()
+            console.log("enemyCoords Afetr Creation", enemyCoords);
 
             startGameLoop()
 
-            //audio.play()
+            // audio.play()
             // audio.pause()
 
             // diedhero=false
@@ -211,7 +214,7 @@ window.addEventListener('keydown', (e) => {
 
         if (!gamePaused && !startGame && !diedhero) {
 
-            audio.pause()
+           // audio.pause()
             gamePaused = true
             settingScreen.style.opacity = "0.1"
             gameSetting.style.opacity = "1"
@@ -233,4 +236,4 @@ window.addEventListener('keydown', (e) => {
 });
 
 let level1 = new mapClass()
-level1.drawMap(mapArray, 0.1)
+level1.drawMap(mapArray, .2)
